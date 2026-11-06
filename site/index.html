@@ -63,12 +63,12 @@
   .top nav a { font-weight: 500; color: var(--ink-soft); text-decoration: none; }
   .top nav a:hover { color: var(--ink); text-decoration: underline; }
 
-  .hero { padding: 88px 0 40px; }
+  .hero { padding: 64px 0 40px; }
   h1 {
     font: 800 clamp(44px, 8.4vw, 92px)/.95 "Bricolage Grotesque", sans-serif;
     letter-spacing: -.035em;
     margin: 0 0 24px;
-    max-width: 12ch;
+    max-width: 15ch;
   }
   .lede { font-size: 20px; color: var(--ink-soft); max-width: 58ch; margin: 0; }
 
@@ -90,6 +90,7 @@
   }
   [role="tab"][aria-selected="true"] { color: var(--code-ink); border-bottom-color: var(--signal); }
   [role="tab"]:hover { color: var(--code-ink); }
+  .agent[hidden] { display: none; }
   .agent { display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 14px; color: var(--code-dim); }
   .agent select {
     font: 500 14px "IBM Plex Sans", sans-serif; color: var(--code-ink); background: rgba(231,236,243,.08);
@@ -273,7 +274,7 @@ eos status</pre>
 </div>
 
 <script>
-  const origin = location.protocol.startsWith("http") ? location.origin : "https://engineering-os.vercel.app";
+  const origin = location.protocol.startsWith("http") ? location.origin : "https://engineering-os-hazel.vercel.app";
   const installUrl = origin + "/install";
   const agentSel = document.getElementById("agent");
   const cmdBody = document.getElementById("cmd-body");
@@ -297,7 +298,7 @@ eos status</pre>
   render();
 
   fetch("/prompt").then(r => r.ok ? r.text() : Promise.reject()).then(t => {
-    promptEl.textContent = t.replaceAll("__SITE__", location.host || "engineering-os.vercel.app").trim();
+    promptEl.textContent = t.replaceAll("__SITE__", location.host || "engineering-os-hazel.vercel.app").trim();
   }).catch(() => { promptEl.textContent = "Couldn't load the prompt. Open /prompt to copy it."; });
 
   // tabs
@@ -310,7 +311,7 @@ eos status</pre>
       t.tabIndex = on ? 0 : -1;
       document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
     });
-    agentWrap.style.visibility = tab.id === "tab-cmd" ? "visible" : "hidden";
+    agentWrap.hidden = tab.id !== "tab-cmd";
   }
   tabs.forEach((t, i) => {
     t.addEventListener("click", () => select(t));

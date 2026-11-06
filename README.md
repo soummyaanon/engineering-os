@@ -1,16 +1,28 @@
 # Engineering OS
 
-A global harness for Claude Code: curated skills, safety hooks, and playbooks that load in **every project** — frontend, backend, AI, reverse engineering, research, and GTM — and grow by dropping in new skills.
+A global harness for coding agents: curated skills, safety hooks, and playbooks that load in **every project** — frontend, backend, AI, reverse engineering, research, and GTM — and grow by dropping in new skills.
+
+**→ https://engineering-os-hazel.vercel.app** (copy the command or the prompt)
 
 ## Install — one command
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/soummyaanon/engineering-os/main/install.sh | bash
+curl -fsSL https://engineering-os-hazel.vercel.app/install | bash
 ```
 
-Installs everything: the `eos` plugin (playbooks + hooks), global working rules, ~70 vetted community skills, and the `eos` CLI. Needs `git`, `node`, `python3`. Re-run any time to update. Add `-s -- --all` after `bash` to include optional skills.
+Installs everything for Claude Code: the `eos` plugin (playbooks + hooks), global working rules, ~50 vetted community skills, recommended plugins, and the `eos` CLI. Needs `git`, `node`, `python3`. Re-run any time to update. Add `-s -- --all` after `bash` for optional skills.
 
 Then open a **new** Claude Code session and try `/eos:map <task>`.
+
+**Other coding agents** (Codex, Cursor, Gemini CLI, GitHub Copilot, Windsurf, OpenCode, Cline, Amp, and 60+ more):
+
+```bash
+curl -fsSL https://engineering-os-hazel.vercel.app/install | bash -s -- --agent codex
+```
+
+They get the skills and the working rules (written to `~/.codex/AGENTS.md` / `~/.gemini/GEMINI.md` where known). Hooks are Claude Code only.
+
+**Or paste a prompt** into any agent and let it install itself: https://engineering-os-hazel.vercel.app/prompt
 
 ## Commands
 

@@ -1,11 +1,11 @@
 Install Engineering OS globally on this machine, for yourself (the coding agent reading this).
 Repo: https://github.com/soummyaanon/engineering-os
 
-1. Read the installer before running it: https://__SITE__/install
+1. Read the installer before running it: https://engineering-os-hazel.vercel.app/install
 2. Work out your agent id for the skills CLI. Common ids: claude-code, codex, cursor, gemini-cli, github-copilot, windsurf, opencode, cline, roo, amp. If unsure, run: npx skills add --help
 3. Run the installer:
-   - If you are Claude Code:  curl -fsSL https://__SITE__/install | bash
-   - Any other agent:         curl -fsSL https://__SITE__/install | bash -s -- --agent <your-agent-id>
+   - If you are Claude Code:  curl -fsSL https://engineering-os-hazel.vercel.app/install | bash
+   - Any other agent:         curl -fsSL https://engineering-os-hazel.vercel.app/install | bash -s -- --agent <your-agent-id>
 4. If the installer says it doesn't know your agent's rules file, add the contents of ~/engineering-os/CLAUDE.md to your own global instructions/rules file.
 5. Show me the installer's summary, then tell me to start a new session so the skills load.
 
