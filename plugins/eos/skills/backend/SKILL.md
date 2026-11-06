@@ -1,6 +1,6 @@
 ---
 name: backend
-description: Engineering OS backend playbook — designing and changing APIs, services, databases, auth, background jobs, payments, and infrastructure (Node/TypeScript, Python/FastAPI/Django, Go, Postgres, Prisma/Drizzle, Supabase, Redis, queues, Docker, serverless). Use for any server-side task, schema change, migration, endpoint, webhook, auth/permissions work, performance problem, or deploy — even when the user only says "add a feature" and the feature needs a server. Defines the correctness, security, and verification bar.
+description: "Engineering OS backend playbook — designing and changing APIs, services, databases, auth, background jobs, payments, and infrastructure (Node/TypeScript, Python/FastAPI/Django, Go, Postgres, Prisma/Drizzle, Supabase, Redis, queues, Docker, serverless). Use for any server-side task, schema change, migration, endpoint, webhook, auth/permissions work, performance problem, or deploy — even when the user only says \"add a feature\" and the feature needs a server. Defines the correctness, security, and verification bar."
 ---
 
 # Backend Playbook

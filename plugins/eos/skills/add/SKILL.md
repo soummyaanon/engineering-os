@@ -1,6 +1,6 @@
 ---
 name: add
-description: Grow the Engineering OS — find and add the best community skill for a need, write a new custom skill, add a new domain, add a hook, or turn a workflow you just did into a reusable skill. Invoked as `/eos:add <what you need>`. Also use when the user says "add a skill for X", "is there a skill for", "make this a skill", "turn this into a skill", "add to my harness / engineering OS", "new domain", "add a hook", or when the same kind of task keeps recurring without a skill covering it.
+description: "Grow the Engineering OS — find and add the best community skill for a need, write a new custom skill, add a new domain, add a hook, or turn a workflow you just did into a reusable skill. Invoked as `/eos:add <what you need>`. Also use when the user says \"add a skill for X\", \"is there a skill for\", \"make this a skill\", \"turn this into a skill\", \"add to my harness / engineering OS\", \"new domain\", \"add a hook\", or when the same kind of task keeps recurring without a skill covering it."
 ---
 
 # /eos:add — grow the Engineering OS

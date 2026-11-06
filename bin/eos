@@ -174,8 +174,18 @@ def install_community(pairs):
         if r is not None and r.returncode != 0:
             warn(f"skills CLI exited {r.returncode} for {repo}")
 
+def known_marketplaces():
+    try:
+        return set(json.load(open(os.path.join(CLAUDE_HOME, "plugins", "known_marketplaces.json"))).keys())
+    except Exception:
+        return set()
+
 def install_plugins(reg, domains):
+    if not shutil.which("claude"):
+        warn("claude CLI not found — skipping marketplace plugins")
+        return
     have = installed_plugins()
+    sources = reg.get("marketplaces", {})
     for d, spec in reg["domains"].items():
         if domains and d not in domains:
             continue
@@ -183,15 +193,54 @@ def install_plugins(reg, domains):
             if p in have:
                 continue
             mk = p.split("@", 1)[1] if "@" in p else ""
-            print(f"  installing plugin {p}")
+            if mk and mk not in known_marketplaces() and mk in sources:
+                r = run(["claude", "plugin", "marketplace", "add", sources[mk]], quiet=True)
+                (ok if r and r.returncode == 0 else warn)(f"marketplace {mk} ({sources[mk]})")
             r = run(["claude", "plugin", "install", p], quiet=True)
             if r is None or r.returncode != 0:
-                warn(f"{p}: could not install (add its marketplace first: claude plugin marketplace add <source> — '{mk}')")
+                warn(f"{p}: could not install")
             else:
                 ok(f"plugin {p}")
 
+RULES_FILES = {"codex": "~/.codex/AGENTS.md", "gemini-cli": "~/.gemini/GEMINI.md", "qwen-code": "~/.qwen/QWEN.md"}
+BEGIN, END = "<!-- engineering-os:begin -->", "<!-- engineering-os:end -->"
+
+def install_for_agent(a, reg):
+    """Non-Claude agents: skills only (hooks/plugins are Claude Code features) + global rules where the file is known."""
+    agent = a.agent
+    if not shutil.which("npx"):
+        err("npx not found — install Node.js"); sys.exit(1)
+    head(f"1. Engineering OS skills for {agent}")
+    own = sorted(d for d in os.listdir(os.path.join(PLUGINS_DIR, "eos", "skills")) if not d.startswith("."))
+    r = run(["npx", "-y", "skills", "add", EOS_HOME, "--full-depth", "--skill", *own, "-g", "-a", agent, "-y"], quiet=True)
+    (ok if r and r.returncode == 0 else err)(f"eos playbooks: {', '.join(own)}")
+    head("2. Community skills" + (" (core + optional)" if a.all else " (core)"))
+    by_repo = defaultdict(list)
+    for _, e in entries(reg, set(a.domain) if a.domain else None, include_optional=a.all):
+        repo, skill = parse_entry(e)
+        by_repo[repo].append(skill)
+    for repo, skills in by_repo.items():
+        r = run(["npx", "-y", "skills", "add", repo, "--skill", *skills, "-g", "-a", agent, "-y"], quiet=True)
+        (ok if r and r.returncode == 0 else warn)(f"{repo}: {', '.join(skills)}")
+    head("3. Global rules")
+    target = RULES_FILES.get(agent)
+    rules = open(GLOBAL_RULES).read()
+    if target:
+        path = os.path.expanduser(target)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        cur = open(path).read() if os.path.exists(path) else ""
+        block = f"{BEGIN}\n{rules.strip()}\n{END}"
+        cur = re.sub(re.escape(BEGIN) + r".*?" + re.escape(END), block, cur, flags=re.S) if BEGIN in cur else (cur.rstrip() + "\n\n" + block + "\n").lstrip()
+        open(path, "w").write(cur)
+        ok(f"rules written to {target} (between engineering-os markers; re-run to update)")
+    else:
+        warn(f"add the rules in {GLOBAL_RULES} to {agent}'s global instructions/rules file")
+    head("Done. Restart the agent so it loads the new skills and rules.")
+
 def cmd_install(a):
     reg = load_registry()
+    if a.agent and a.agent != "claude-code":
+        return install_for_agent(a, reg)
     domains = set(a.domain) if a.domain else None
     head("1. Domain plugins")
     if a.no_link:
@@ -278,7 +327,7 @@ def scaffold_skill(name, description):
     os.makedirs(os.path.join(sdir, "references"))
     tpl = open(SKILL_TEMPLATE).read()
     desc = description or f"TODO: what {name} does AND when to use it (be specific and a little pushy about triggers)."
-    open(os.path.join(sdir, "SKILL.md"), "w").write(tpl.replace("{{name}}", name).replace("{{description}}", desc))
+    open(os.path.join(sdir, "SKILL.md"), "w").write(tpl.replace("{{name}}", name).replace("{{description}}", desc.replace('"', '\\"')))
     ok(f"created {os.path.relpath(sdir, EOS_HOME)}/SKILL.md  → /eos:{name}")
     return name
 
@@ -435,7 +484,7 @@ def cmd_doctor(_a):
 def main():
     ap = argparse.ArgumentParser(prog="eos", description="Engineering OS manager", formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
     sp = ap.add_subparsers(dest="cmd", required=True)
-    p = sp.add_parser("install"); p.add_argument("--all", action="store_true"); p.add_argument("--domain", action="append"); p.add_argument("--skip-community", action="store_true"); p.add_argument("--no-link", action="store_true", help="for marketplace installs: skip symlinking plugins"); p.set_defaults(f=cmd_install)
+    p = sp.add_parser("install"); p.add_argument("--all", action="store_true"); p.add_argument("--domain", action="append"); p.add_argument("--skip-community", action="store_true"); p.add_argument("--no-link", action="store_true", help="for marketplace installs: skip symlinking plugins"); p.add_argument("--agent", help="install for another coding agent (codex, cursor, gemini-cli, github-copilot, windsurf, opencode, …)"); p.set_defaults(f=cmd_install)
     sp.add_parser("status").set_defaults(f=cmd_status)
     p = sp.add_parser("add"); p.add_argument("entry"); p.add_argument("--domain", required=True); p.add_argument("--optional", action="store_true"); p.set_defaults(f=cmd_add)
     p = sp.add_parser("enable"); p.add_argument("domain"); p.set_defaults(f=cmd_enable)

@@ -1,6 +1,6 @@
 ---
 name: frontend
-description: Engineering OS frontend playbook — how to build, change, and verify web UI (React, Next.js, Vue, Svelte, Astro, Tailwind, landing pages, dashboards, design systems, animations). Use whenever the task touches components, pages, styling, layout, client state, forms, accessibility, Core Web Vitals, or "make it look better", even if the user never says "frontend". Routes to the right specialist design/perf skills and defines the verification bar (run it, look at it, screenshot it) before calling UI work done.
+description: "Engineering OS frontend playbook — how to build, change, and verify web UI (React, Next.js, Vue, Svelte, Astro, Tailwind, landing pages, dashboards, design systems, animations). Use whenever the task touches components, pages, styling, layout, client state, forms, accessibility, Core Web Vitals, or \"make it look better\", even if the user never says \"frontend\". Routes to the right specialist design/perf skills and defines the verification bar (run it, look at it, screenshot it) before calling UI work done."
 ---
 
 # Frontend Playbook

@@ -1,6 +1,6 @@
 ---
 name: research
-description: Engineering OS research playbook — rigorous, source-backed research on technologies, libraries, vendors, markets, competitors, papers, and "what's the best way to X" questions, producing a decision-ready brief with citations. Use whenever the user asks to research, compare, evaluate options, do market or competitor research, investigate a technical approach, check the state of the art, or answer a question whose answer may have changed recently — even if they just say "look into X" or "what should we use for Y".
+description: "Engineering OS research playbook — rigorous, source-backed research on technologies, libraries, vendors, markets, competitors, papers, and \"what's the best way to X\" questions, producing a decision-ready brief with citations. Use whenever the user asks to research, compare, evaluate options, do market or competitor research, investigate a technical approach, check the state of the art, or answer a question whose answer may have changed recently — even if they just say \"look into X\" or \"what should we use for Y\"."
 ---
 
 # Research Playbook

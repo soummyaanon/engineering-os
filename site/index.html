@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Engineering OS</title>
+<meta name="description" content="One command sets up your coding agent with vetted skills, safety hooks and playbooks for frontend, backend, AI, reverse engineering, research and go-to-market.">
+<meta property="og:title" content="Engineering OS">
+<meta property="og:description" content="Set up your coding agent once. Every project gets it.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314213D'/%3E%3Cpath d='M9 10h14M9 16h10M9 22h14' stroke='%23F2C230' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #E7ECF3;
+    --paper-2: #DCE3EC;
+    --ink: #14213D;
+    --ink-soft: #46536B;
+    --line: #B9C4D3;
+    --signal: #F2C230;
+    --signal-ink: #14213D;
+    --code-bg: #14213D;
+    --code-ink: #E7ECF3;
+    --code-dim: #8E9BB3;
+    --grid: rgba(20, 33, 61, .06);
+    --focus: #2B59C3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0F1A2E;
+      --paper-2: #16233B;
+      --ink: #E7ECF3;
+      --ink-soft: #A4B0C6;
+      --line: #2C3B57;
+      --code-bg: #0A1323;
+      --code-ink: #E7ECF3;
+      --code-dim: #7D8AA3;
+      --grid: rgba(231, 236, 243, .045);
+      --focus: #F2C230;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 32px 32px;
+    color: var(--ink);
+    font: 400 17px/1.6 "IBM Plex Sans", system-ui, sans-serif;
+  }
+  a { color: inherit; text-underline-offset: 3px; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.top { display: flex; justify-content: space-between; align-items: center; padding: 28px 0 0; }
+  .mark { display: flex; align-items: center; gap: 10px; font: 700 20px/1 "Bricolage Grotesque", sans-serif; text-decoration: none; }
+  .mark svg { width: 28px; height: 28px; }
+  .top nav a { font-weight: 500; color: var(--ink-soft); text-decoration: none; }
+  .top nav a:hover { color: var(--ink); text-decoration: underline; }
+
+  .hero { padding: 88px 0 40px; }
+  h1 {
+    font: 800 clamp(44px, 8.4vw, 92px)/.95 "Bricolage Grotesque", sans-serif;
+    letter-spacing: -.035em;
+    margin: 0 0 24px;
+    max-width: 12ch;
+  }
+  .lede { font-size: 20px; color: var(--ink-soft); max-width: 58ch; margin: 0; }
+
+  /* the install console — the one loud thing on the page */
+  .console {
+    margin: 44px 0 0;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 14px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 24px 60px -24px rgba(10, 19, 35, .55);
+    overflow: hidden;
+  }
+  .console-bar { display: flex; align-items: stretch; justify-content: space-between; border-bottom: 1px solid rgba(231,236,243,.1); }
+  [role="tablist"] { display: flex; }
+  [role="tab"] {
+    appearance: none; border: 0; background: none; color: var(--code-dim);
+    font: 600 15px/1 "IBM Plex Sans", sans-serif;
+    padding: 18px 22px 16px; cursor: pointer; border-bottom: 3px solid transparent;
+  }
+  [role="tab"][aria-selected="true"] { color: var(--code-ink); border-bottom-color: var(--signal); }
+  [role="tab"]:hover { color: var(--code-ink); }
+  .agent { display: flex; align-items: center; gap: 8px; padding: 0 16px; font-size: 14px; color: var(--code-dim); }
+  .agent select {
+    font: 500 14px "IBM Plex Sans", sans-serif; color: var(--code-ink); background: rgba(231,236,243,.08);
+    border: 1px solid rgba(231,236,243,.16); border-radius: 8px; padding: 6px 28px 6px 10px; cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238E9BB3' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+  }
+  .agent select option { color: #14213D; }
+  [role="tabpanel"] { padding: 26px 24px 24px; }
+  [role="tabpanel"][hidden] { display: none; }
+  .cmd { display: flex; gap: 14px; align-items: flex-start; }
+  pre {
+    margin: 0; flex: 1; min-width: 0; overflow-x: auto;
+    font: 400 15.5px/1.65 "JetBrains Mono", ui-monospace, monospace;
+    white-space: pre;
+  }
+  pre.wrap-text { white-space: pre-wrap; max-height: 330px; overflow-y: auto; font-size: 14px; }
+  .prompt-sign { color: var(--signal); user-select: none; }
+  .copy {
+    flex: none; appearance: none; cursor: pointer;
+    background: var(--signal); color: var(--signal-ink); border: 0; border-radius: 9px;
+    font: 600 15px/1 "IBM Plex Sans", sans-serif; padding: 12px 18px; min-width: 92px;
+    transition: transform .12s ease;
+  }
+  .copy:active { transform: translateY(1px); }
+  .note { margin: 16px 0 0; font-size: 14px; color: var(--code-dim); }
+  .note code { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--code-ink); }
+  .stack-v { display: flex; flex-direction: column; gap: 16px; }
+  .stack-v .copy { align-self: flex-start; }
+
+  .reqs { margin: 18px 0 0; font-size: 15px; color: var(--ink-soft); }
+
+  section { padding: 64px 0 8px; }
+  h2 { font: 700 34px/1.1 "Bricolage Grotesque", sans-serif; letter-spacing: -.02em; margin: 0 0 22px; }
+
+  .areas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 40px; margin: 0; }
+  .areas div { padding: 18px 0; border-top: 1px solid var(--line); }
+  .areas dt { font: 700 19px/1.3 "Bricolage Grotesque", sans-serif; margin: 0 0 4px; display: flex; align-items: baseline; gap: 10px; }
+  .areas dt code { font: 500 13px "JetBrains Mono", monospace; color: var(--ink-soft); }
+  .areas dd { margin: 0; color: var(--ink-soft); font-size: 16px; }
+
+  .guards { list-style: none; margin: 0; padding: 0; }
+  .guards li { padding: 14px 0 14px 28px; border-top: 1px solid var(--line); position: relative; }
+  .guards li::before { content: ""; position: absolute; left: 0; top: 22px; width: 12px; height: 12px; border-radius: 3px; background: var(--signal); box-shadow: 0 0 0 2px var(--ink) inset; }
+  .guards b { font-weight: 600; }
+
+  .grow pre {
+    background: var(--paper-2); color: var(--ink); border: 1px solid var(--line); border-radius: 12px;
+    padding: 18px 20px; font-size: 14.5px;
+  }
+  .grow .c { color: var(--ink-soft); }
+  .grow p { color: var(--ink-soft); max-width: 62ch; }
+
+  .agents-line { color: var(--ink-soft); max-width: 66ch; }
+  .agents-line strong { color: var(--ink); font-weight: 600; }
+
+  footer { padding: 72px 0 48px; color: var(--ink-soft); font-size: 15px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 16px; }
+    .hero { padding: 56px 0 24px; }
+    .lede { font-size: 18px; }
+    .console-bar { flex-direction: column; }
+    .agent { padding: 0 16px 14px; }
+    [role="tab"] { padding: 16px 16px 14px; }
+    [role="tabpanel"] { padding: 20px 16px; }
+    .cmd { flex-direction: column; }
+    pre { font-size: 13.5px; }
+    .areas { grid-template-columns: 1fr; }
+    h2 { font-size: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="/" aria-label="Engineering OS home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#14213D"/><path d="M9 10h14M9 16h10M9 22h14" stroke="#F2C230" stroke-width="3" stroke-linecap="round"/></svg>
+      Engineering OS
+    </a>
+    <nav><a href="https://github.com/soummyaanon/engineering-os">GitHub</a></nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Set up your coding agent once.</h1>
+      <p class="lede">One command gives Claude Code, Codex, Cursor or any other coding agent the same vetted skills, safety guards and playbooks in every project, from frontend and backend to AI, research and go-to-market.</p>
+
+      <div class="console">
+        <div class="console-bar">
+          <div role="tablist" aria-label="Install method">
+            <button role="tab" id="tab-cmd" aria-controls="panel-cmd" aria-selected="true">Command</button>
+            <button role="tab" id="tab-prompt" aria-controls="panel-prompt" aria-selected="false" tabindex="-1">Prompt</button>
+          </div>
+          <label class="agent" id="agent-wrap">
+            <span>For</span>
+            <select id="agent" aria-label="Coding agent">
+              <option value="claude-code">Claude Code</option>
+              <option value="codex">Codex</option>
+              <option value="cursor">Cursor</option>
+              <option value="gemini-cli">Gemini CLI</option>
+              <option value="github-copilot">GitHub Copilot</option>
+              <option value="windsurf">Windsurf</option>
+              <option value="opencode">OpenCode</option>
+              <option value="cline">Cline</option>
+              <option value="amp">Amp</option>
+            </select>
+          </label>
+        </div>
+
+        <div role="tabpanel" id="panel-cmd" aria-labelledby="tab-cmd">
+          <div class="cmd">
+            <pre id="cmd-text"><span class="prompt-sign" aria-hidden="true">$ </span><span id="cmd-body"></span></pre>
+            <button class="copy" data-copy="cmd">Copy</button>
+          </div>
+          <p class="note" id="cmd-note">Run it in your terminal, then open a new Claude Code session and type <code>/eos:map</code>.</p>
+        </div>
+
+        <div role="tabpanel" id="panel-prompt" aria-labelledby="tab-prompt" hidden>
+          <div class="stack-v">
+            <pre class="wrap-text" id="prompt-text"></pre>
+            <button class="copy" data-copy="prompt">Copy prompt</button>
+          </div>
+          <p class="note">Paste it into any coding agent. It reads the installer first, works out its own agent id, and installs globally.</p>
+        </div>
+      </div>
+      <p class="reqs">Needs git, Node.js and Python 3. Re-run the same command to update.</p>
+    </div>
+
+    <section aria-labelledby="h-areas">
+      <h2 id="h-areas">What it sets up</h2>
+      <dl class="areas">
+        <div><dt>Frontend <code>/eos:frontend</code></dt><dd>Build, polish and verify UI. Routes to Vercel's React rules, shadcn, impeccable, accessibility and performance audits.</dd></div>
+        <div><dt>Backend <code>/eos:backend</code></dt><dd>APIs, Postgres, auth, payments and reliability, with a verification bar before anything is called done.</dd></div>
+        <div><dt>AI engineering <code>/eos:ai</code></dt><dd>LLM features, agents, MCP servers, RAG, cost and latency. Pairs with <code>/eos:evals</code> for real test sets.</dd></div>
+        <div><dt>Reverse engineering <code>/eos:reverse</code></dt><dd>Map unfamiliar codebases, undocumented APIs, protocols and competitor products, within authorized scope.</dd></div>
+        <div><dt>Research <code>/eos:research</code></dt><dd>Decision-ready briefs with dated citations, plus a researcher agent for parallel digging.</dd></div>
+        <div><dt>Go-to-market <code>/eos:gtm</code></dt><dd>Positioning, pricing, launch and demo playbooks, wired to Corey Haines' marketing skills.</dd></div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="h-guards">
+      <h2 id="h-guards">Guards that run on every command</h2>
+      <ul class="guards">
+        <li><b>Blocks the unrecoverable.</b> Wiping your home folder or a disk never runs.</li>
+        <li><b>Asks before the risky.</b> Force-push, pushing to main, hard resets, destructive SQL, piping scripts into a shell, publishing and production deploys wait for your yes. Clearing <code>node_modules</code> doesn't.</li>
+        <li><b>Keeps secrets out of code.</b> Real-looking API keys and database passwords written into source files trigger a check.</li>
+        <li><b>Briefs every session.</b> It detects the project's stack and points the agent at the right playbook.</li>
+      </ul>
+      <p class="agents-line" style="margin-top:18px">Guards run in <strong>Claude Code</strong>. Other agents get the skills and the working rules.</p>
+    </section>
+
+    <section class="grow" aria-labelledby="h-grow">
+      <h2 id="h-grow">Grow it as you go</h2>
+      <p>Ask your agent <code>/eos:add</code> with what you need. It searches the open skills directory, keeps only reputable sources, and records the pick so every machine you install on gets it. Or from the terminal:</p>
+<pre><span class="c"># adopt a community skill</span>
+eos add owner/repo@skill --domain frontend
+<span class="c"># write your own, live next session as /eos:stripe-webhooks</span>
+eos new-skill stripe-webhooks
+<span class="c"># check what's installed</span>
+eos status</pre>
+    </section>
+
+    <section aria-labelledby="h-agents">
+      <h2 id="h-agents">Works with your agent</h2>
+      <p class="agents-line"><strong>Claude Code</strong> gets everything: skills, hooks, slash commands and global rules. <strong>Codex, Cursor, Gemini CLI, GitHub Copilot, Windsurf, OpenCode, Cline, Amp</strong> and 60 more get the skills and the working rules through the open skills format.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>MIT licensed</span>
+    <a href="https://github.com/soummyaanon/engineering-os">Source on GitHub</a>
+    <a href="/install">Read the installer</a>
+    <a href="/prompt">Plain-text prompt</a>
+  </footer>
+</div>
+
+<script>
+  const origin = location.protocol.startsWith("http") ? location.origin : "https://engineering-os.vercel.app";
+  const installUrl = origin + "/install";
+  const agentSel = document.getElementById("agent");
+  const cmdBody = document.getElementById("cmd-body");
+  const cmdNote = document.getElementById("cmd-note");
+  const promptEl = document.getElementById("prompt-text");
+
+  function command() {
+    const a = agentSel.value;
+    return a === "claude-code"
+      ? `curl -fsSL ${installUrl} | bash`
+      : `curl -fsSL ${installUrl} | bash -s -- --agent ${a}`;
+  }
+  function render() {
+    cmdBody.textContent = command();
+    const name = agentSel.options[agentSel.selectedIndex].text;
+    cmdNote.innerHTML = agentSel.value === "claude-code"
+      ? "Run it in your terminal, then open a new Claude Code session and type <code>/eos:map</code>."
+      : `Run it in your terminal, then restart ${name}. You get the skills and working rules; guard hooks are Claude Code only.`;
+  }
+  agentSel.addEventListener("change", render);
+  render();
+
+  fetch("/prompt").then(r => r.ok ? r.text() : Promise.reject()).then(t => {
+    promptEl.textContent = t.replaceAll("__SITE__", location.host || "engineering-os.vercel.app").trim();
+  }).catch(() => { promptEl.textContent = "Couldn't load the prompt. Open /prompt to copy it."; });
+
+  // tabs
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  const agentWrap = document.getElementById("agent-wrap");
+  function select(tab) {
+    tabs.forEach(t => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    });
+    agentWrap.style.visibility = tab.id === "tab-cmd" ? "visible" : "hidden";
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => select(t));
+    t.addEventListener("keydown", e => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      select(n); n.focus();
+    });
+  });
+
+  // copy
+  document.querySelectorAll(".copy").forEach(btn => {
+    const label = btn.textContent;
+    btn.addEventListener("click", async () => {
+      const text = btn.dataset.copy === "cmd" ? command() : promptEl.textContent;
+      try { await navigator.clipboard.writeText(text); btn.textContent = "Copied"; }
+      catch { btn.textContent = "Press ⌘C"; getSelection().selectAllChildren(btn.dataset.copy === "cmd" ? cmdBody : promptEl); }
+      setTimeout(() => (btn.textContent = label), 1600);
+    });
+  });
+</script>
+</body>
+</html>

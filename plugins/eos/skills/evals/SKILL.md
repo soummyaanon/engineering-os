@@ -1,6 +1,6 @@
 ---
 name: evals
-description: Build and run evaluations for LLM features, prompts, agents, and RAG pipelines — golden datasets, assertions, LLM-as-judge graders, regression gates in CI, A/B comparison of prompts or models. Use whenever someone changes a prompt, swaps a model, ships an AI feature, asks "is this better?", "how do I test my agent/chatbot", or reports that an AI feature "sometimes" gives bad answers.
+description: "Build and run evaluations for LLM features, prompts, agents, and RAG pipelines — golden datasets, assertions, LLM-as-judge graders, regression gates in CI, A/B comparison of prompts or models. Use whenever someone changes a prompt, swaps a model, ships an AI feature, asks \"is this better?\", \"how do I test my agent/chatbot\", or reports that an AI feature \"sometimes\" gives bad answers."
 ---
 
 # LLM Evals

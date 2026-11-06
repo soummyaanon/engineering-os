@@ -1,6 +1,6 @@
 ---
 name: researcher
-description: Focused research subagent. Give it ONE narrow question or ONE option to evaluate plus the decision criteria; it searches the web and primary sources and returns a short cited summary. Use it to fan out parallel research (one agent per option/angle) for the eos:research playbook.
+description: "Focused research subagent. Give it ONE narrow question or ONE option to evaluate plus the decision criteria; it searches the web and primary sources and returns a short cited summary. Use it to fan out parallel research (one agent per option/angle) for the eos:research playbook."
 tools: WebSearch, WebFetch, Read, Grep, Glob, Bash
 model: sonnet
 ---

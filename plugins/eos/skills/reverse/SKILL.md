@@ -1,6 +1,6 @@
 ---
 name: reverse
-description: Engineering OS reverse-engineering playbook — understanding systems you didn't build: unfamiliar or legacy codebases ("how does this repo work?"), undocumented web APIs and network traffic of your own or authorized apps, competitor product teardowns (UX, pricing, stack, funnels), file formats and protocols, compiled binaries/apps for interoperability or security research, and recreating a design or behavior from observation. Use whenever the user wants to figure out how something works from the outside in, map an unknown system, document an undocumented API, or "reverse engineer" anything — and for CTF/authorized security work.
+description: "Engineering OS reverse-engineering playbook — understanding systems you didn't build: unfamiliar or legacy codebases (\"how does this repo work?\"), undocumented web APIs and network traffic of your own or authorized apps, competitor product teardowns (UX, pricing, stack, funnels), file formats and protocols, compiled binaries/apps for interoperability or security research, and recreating a design or behavior from observation. Use whenever the user wants to figure out how something works from the outside in, map an unknown system, document an undocumented API, or \"reverse engineer\" anything — and for CTF/authorized security work."
 ---
 
 # Reverse Engineering Playbook

@@ -1,6 +1,6 @@
 ---
 name: gtm
-description: Engineering OS go-to-market playbook — ICP and positioning, messaging, pricing and packaging, launch plans, channel strategy, landing page and funnel design, demos, sales motion (PLG vs sales-led), metrics, and growth experiments for software/AI products. Use whenever the user is preparing a launch or demo, writing a landing page or pitch, deciding pricing, choosing channels, asking "how do I get users/customers", building marketing for a product they built, or doing anything GTM/marketing/sales-related — and route to the specialist marketing skills for execution.
+description: "Engineering OS go-to-market playbook — ICP and positioning, messaging, pricing and packaging, launch plans, channel strategy, landing page and funnel design, demos, sales motion (PLG vs sales-led), metrics, and growth experiments for software/AI products. Use whenever the user is preparing a launch or demo, writing a landing page or pitch, deciding pricing, choosing channels, asking \"how do I get users/customers\", building marketing for a product they built, or doing anything GTM/marketing/sales-related — and route to the specialist marketing skills for execution."
 ---
 
 # Go-To-Market Playbook

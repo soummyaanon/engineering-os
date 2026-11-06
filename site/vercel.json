@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/install",
+      "destination": "https://raw.githubusercontent.com/soummyaanon/engineering-os/main/install.sh"
+    },
+    {
+      "source": "/prompt",
+      "destination": "/prompt.txt"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/prompt.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    }
+  ]
+}

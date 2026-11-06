@@ -1,6 +1,6 @@
 ---
 name: map
-description: Engineering OS skill map — the router that says which installed skill, agent, or plugin to use for any task across engineering (frontend, backend, AI, testing, debugging, review, deploy, security), reverse engineering, research, marketing, GTM, docs, and design. Load this whenever you're unsure which skill fits a task, when a task spans several domains, at the start of a large or ambiguous request, or when the user asks "what skills do I have" / "what can the harness do".
+description: "Engineering OS skill map — the router that says which installed skill, agent, or plugin to use for any task across engineering (frontend, backend, AI, testing, debugging, review, deploy, security), reverse engineering, research, marketing, GTM, docs, and design. Load this whenever you're unsure which skill fits a task, when a task spans several domains, at the start of a large or ambiguous request, or when the user asks \"what skills do I have\" / \"what can the harness do\"."
 ---
 
 # Engineering OS — Skill Map

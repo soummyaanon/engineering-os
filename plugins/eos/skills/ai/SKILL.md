@@ -1,6 +1,6 @@
 ---
 name: ai
-description: Engineering OS playbook for building AI products and automation — LLM features, agents, tool use, RAG, MCP servers, structured outputs, prompt design, model selection, cost/latency, evals, and agentic automations (Claude API, Agent SDK, Vercel AI SDK, OpenAI, LangChain, Pydantic AI, Hugging Face). Use whenever code calls an LLM, the user wants an "AI feature", "agent", "chatbot", "copilot", "automation", "workflow that uses AI", or asks which model to use — even if they don't name a framework.
+description: "Engineering OS playbook for building AI products and automation — LLM features, agents, tool use, RAG, MCP servers, structured outputs, prompt design, model selection, cost/latency, evals, and agentic automations (Claude API, Agent SDK, Vercel AI SDK, OpenAI, LangChain, Pydantic AI, Hugging Face). Use whenever code calls an LLM, the user wants an \"AI feature\", \"agent\", \"chatbot\", \"copilot\", \"automation\", \"workflow that uses AI\", or asks which model to use — even if they don't name a framework."
 ---
 
 # AI Engineering Playbook
