@@ -6,8 +6,8 @@
   eos add <owner/repo@skill> --domain D [--optional]   add a community skill to the registry and install it
   eos enable <domain>                                  install a domain's optional skills too
   eos remove <skill>                                   unlink a skill from Claude Code and drop it from the registry
-  eos new-skill <domain> <name> [-d "description"]     scaffold your own skill inside a domain plugin
-  eos new-domain <name> [-d "description"]             scaffold a new domain plugin (eos-<name>)
+  eos new-skill <name> [-d "description"]              scaffold your own skill  → /eos:<name>
+  eos new-domain <name> [-d "description"]             new registry domain + its playbook skill → /eos:<name>
   eos sync                                             regenerate marketplace.json and relink plugins
   eos validate                                         validate plugins, marketplace, and skill frontmatter
   eos audit                                            scan installed community skills for risky content
@@ -121,6 +121,11 @@ def link(src, dst):
 
 def link_plugins():
     os.makedirs(SKILLS_DIR, exist_ok=True)
+    for d in os.listdir(SKILLS_DIR):  # drop links to plugins that no longer exist (renames)
+        full = os.path.join(SKILLS_DIR, d)
+        if os.path.islink(full) and os.readlink(full).startswith(PLUGINS_DIR) and not os.path.exists(full):
+            os.unlink(full)
+            ok(f"removed stale link {d}")
     for p in plugin_dirs():
         r = link(os.path.join(PLUGINS_DIR, p), os.path.join(SKILLS_DIR, p))
         if r == "blocked":
@@ -200,7 +205,7 @@ def cmd_install(a):
         install_community(entries(reg, domains, include_optional=a.all))
         head("4. Marketplace plugins")
         install_plugins(reg, domains)
-    head("Done. Restart Claude Code (or /clear won't be enough — start a new session) to load everything.")
+    head("Done. Start a new Claude Code session (not /clear) to load everything. Try /eos:map")
 
 def cmd_enable(a):
     reg = load_registry()
@@ -262,44 +267,37 @@ def cmd_remove(a):
 # ---------- scaffolding ----------
 SKILL_TEMPLATE = os.path.join(EOS_HOME, "templates", "skill", "SKILL.md")
 
-def cmd_new_skill(a):
-    plugin = a.domain if a.domain.startswith("eos-") else f"eos-{a.domain}"
-    pdir = os.path.join(PLUGINS_DIR, plugin)
-    if not os.path.isdir(pdir):
-        err(f"no plugin {plugin}; create it with: eos new-domain {a.domain.removeprefix('eos-')}")
-        sys.exit(1)
-    name = a.name.lower().replace(" ", "-")
-    sdir = os.path.join(pdir, "skills", name)
+EOS_PLUGIN = os.path.join(PLUGINS_DIR, "eos")
+
+def scaffold_skill(name, description):
+    name = name.lower().replace(" ", "-")
+    sdir = os.path.join(EOS_PLUGIN, "skills", name)
     if os.path.exists(sdir):
         err(f"{sdir} already exists")
         sys.exit(1)
     os.makedirs(os.path.join(sdir, "references"))
     tpl = open(SKILL_TEMPLATE).read()
-    desc = a.description or f"TODO: what {name} does AND when to use it (be specific and a little pushy about triggers)."
+    desc = description or f"TODO: what {name} does AND when to use it (be specific and a little pushy about triggers)."
     open(os.path.join(sdir, "SKILL.md"), "w").write(tpl.replace("{{name}}", name).replace("{{description}}", desc))
-    ok(f"created {sdir}/SKILL.md")
-    print(f"  Next: write it (or ask Claude: \"use skill-creator to write and eval {plugin}:{name}\"), then `eos validate`.")
-    print(f"  It loads as {plugin}:{name} in your next Claude Code session — no install step.")
+    ok(f"created {os.path.relpath(sdir, EOS_HOME)}/SKILL.md  → /eos:{name}")
+    return name
+
+def cmd_new_skill(a):
+    name = scaffold_skill(a.name, a.description)
+    print(f"  Next: write it (or ask Claude: \"use skill-creator to write and eval eos:{name}\"), then `eos validate`.")
+    print(f"  Live in your next Claude Code session as /eos:{name} — no install step.")
 
 def cmd_new_domain(a):
-    name = a.name.lower().removeprefix("eos-")
-    plugin = f"eos-{name}"
-    pdir = os.path.join(PLUGINS_DIR, plugin)
-    if os.path.exists(pdir):
-        err(f"{pdir} exists")
-        sys.exit(1)
-    os.makedirs(os.path.join(pdir, ".claude-plugin"))
-    os.makedirs(os.path.join(pdir, "skills"))
-    manifest = {"name": plugin, "version": "0.1.0",
-                "description": a.description or f"Engineering OS — {name} domain",
-                "author": {"name": "Engineering OS"}, "keywords": ["engineering-os", name]}
-    json.dump(manifest, open(os.path.join(pdir, ".claude-plugin", "plugin.json"), "w"), indent=2)
+    name = a.name.lower()
     reg = load_registry()
+    if name in reg["domains"]:
+        warn(f"registry domain '{name}' already exists")
     reg["domains"].setdefault(name, {"description": a.description or "", "core": [], "optional": [], "plugins": []})
     save_registry(reg)
-    ok(f"created plugin {plugin} and registry domain '{name}'")
-    cmd_sync(a)
-    print(f"  Next: eos new-skill {name} {name}-playbook")
+    ok(f"registry domain '{name}'")
+    scaffold_skill(name, a.description and f"Engineering OS {name} playbook: {a.description}")
+    print(f"  Next: write the playbook, add community skills with `eos add owner/repo@skill --domain {name}`,")
+    print(f"  and add a row for /eos:{name} to plugins/eos/skills/map/SKILL.md.")
 
 
 def cmd_sync(_a=None):
@@ -372,7 +370,7 @@ def cmd_validate(_a):
             else:
                 bad += 1
                 err(f"{name}: {(r.stdout + r.stderr).strip()[-600:] if r else 'claude not runnable'}")
-    hooks = os.path.join(PLUGINS_DIR, "eos-core", "hooks")
+    hooks = os.path.join(PLUGINS_DIR, "eos", "hooks")
     head("Hook scripts compile")
     for f in sorted(os.listdir(hooks)):
         if f.endswith(".py"):
@@ -442,7 +440,7 @@ def main():
     p = sp.add_parser("add"); p.add_argument("entry"); p.add_argument("--domain", required=True); p.add_argument("--optional", action="store_true"); p.set_defaults(f=cmd_add)
     p = sp.add_parser("enable"); p.add_argument("domain"); p.set_defaults(f=cmd_enable)
     p = sp.add_parser("remove"); p.add_argument("skill"); p.set_defaults(f=cmd_remove)
-    p = sp.add_parser("new-skill"); p.add_argument("domain"); p.add_argument("name"); p.add_argument("-d", "--description"); p.set_defaults(f=cmd_new_skill)
+    p = sp.add_parser("new-skill"); p.add_argument("name"); p.add_argument("-d", "--description"); p.set_defaults(f=cmd_new_skill)
     p = sp.add_parser("new-domain"); p.add_argument("name"); p.add_argument("-d", "--description"); p.set_defaults(f=cmd_new_domain)
     sp.add_parser("sync").set_defaults(f=cmd_sync)
     sp.add_parser("validate").set_defaults(f=cmd_validate)

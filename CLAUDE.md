@@ -12,9 +12,9 @@ These apply in every project. A project's own CLAUDE.md wins where they conflict
 
 ## Skills — use them
 
-- Before domain work, load the matching Engineering OS playbook: `eos-frontend:frontend-playbook`, `eos-backend:backend-playbook`, `eos-ai:ai-engineering`, `eos-reverse-engineering:reverse-engineering`, `eos-gtm:gtm-strategy`, `eos-research:research`. Each routes to the best specialist skills for the task.
-- Unsure which skill fits? Load `eos-core:eos` (the skill map).
-- When a task keeps recurring and no skill covers it, suggest capturing it with `eos-core:extend-harness`.
+- Before domain work, load the matching Engineering OS playbook: `eos:frontend`, `eos:backend`, `eos:ai`, `eos:reverse`, `eos:gtm`, `eos:research`. Each routes to the best specialist skills for the task.
+- Unsure which skill fits? Load `eos:map` (the skill map).
+- When a task keeps recurring and no skill covers it, suggest capturing it with `eos:add`.
 
 ## Code quality
 
