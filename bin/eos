@@ -1,0 +1,453 @@
+#!/usr/bin/env python3
+"""eos — Engineering OS manager.
+
+  eos install [--all] [--domain D] [--skip-community]   link plugins + rules, install registry skills
+  eos status                                           what's installed / missing
+  eos add <owner/repo@skill> --domain D [--optional]   add a community skill to the registry and install it
+  eos enable <domain>                                  install a domain's optional skills too
+  eos remove <skill>                                   unlink a skill from Claude Code and drop it from the registry
+  eos new-skill <domain> <name> [-d "description"]     scaffold your own skill inside a domain plugin
+  eos new-domain <name> [-d "description"]             scaffold a new domain plugin (eos-<name>)
+  eos sync                                             regenerate marketplace.json and relink plugins
+  eos validate                                         validate plugins, marketplace, and skill frontmatter
+  eos audit                                            scan installed community skills for risky content
+  eos doctor                                           check prerequisites and harness health
+
+Env: EOS_HOME (default: repo containing this script), CLAUDE_HOME (default ~/.claude)
+"""
+import argparse
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+from collections import defaultdict
+
+EOS_HOME = os.environ.get("EOS_HOME") or os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+CLAUDE_HOME = os.environ.get("CLAUDE_HOME") or os.path.expanduser("~/.claude")
+SKILLS_DIR = os.path.join(CLAUDE_HOME, "skills")
+AGENTS_SKILLS = os.path.expanduser("~/.agents/skills")
+PLUGINS_DIR = os.path.join(EOS_HOME, "plugins")
+REGISTRY = os.path.join(EOS_HOME, "registry", "community.json")
+MARKETPLACE = os.path.join(EOS_HOME, ".claude-plugin", "marketplace.json")
+GLOBAL_RULES = os.path.join(EOS_HOME, "CLAUDE.md")
+MARKETPLACE_NAME = "engineering-os"
+
+TTY = sys.stdout.isatty()
+def c(code, s): return f"\033[{code}m{s}\033[0m" if TTY else s
+def ok(s): print(c("32", "✓ ") + s)
+def warn(s): print(c("33", "! ") + s)
+def err(s): print(c("31", "✗ ") + s)
+def head(s): print("\n" + c("1", s))
+
+
+# ---------- registry ----------
+def load_registry():
+    with open(REGISTRY) as f:
+        return json.load(f)
+
+def save_registry(reg):
+    with open(REGISTRY, "w") as f:
+        json.dump(reg, f, indent=2)
+        f.write("\n")
+
+def parse_entry(e):
+    repo, _, skill = e.partition("@")
+    return repo, skill
+
+def entries(reg, domains=None, include_optional=False):
+    out = []
+    for d, spec in reg["domains"].items():
+        if domains and d not in domains:
+            continue
+        out += [(d, e) for e in spec.get("core", [])]
+        if include_optional:
+            out += [(d, e) for e in spec.get("optional", [])]
+    return out
+
+
+# ---------- helpers ----------
+def run(cmd, quiet=False, timeout=600):
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        if not quiet and r.returncode != 0:
+            print(r.stdout[-2000:], r.stderr[-2000:])
+        return r
+    except FileNotFoundError:
+        return None
+
+def plugin_dirs():
+    return sorted(d for d in os.listdir(PLUGINS_DIR)
+                  if os.path.isfile(os.path.join(PLUGINS_DIR, d, ".claude-plugin", "plugin.json")))
+
+def skill_installed(name):
+    return os.path.isfile(os.path.join(SKILLS_DIR, name, "SKILL.md"))
+
+def installed_plugins():
+    p = os.path.join(CLAUDE_HOME, "plugins", "installed_plugins.json")
+    try:
+        d = json.load(open(p))
+        return set((d.get("plugins") or d).keys())
+    except Exception:
+        return set()
+
+def frontmatter(path):
+    try:
+        txt = open(path).read()
+    except Exception:
+        return None
+    m = re.match(r"^---\n(.*?)\n---", txt, re.S)
+    if not m:
+        return None
+    fm = {}
+    for line in m.group(1).splitlines():
+        if ":" in line and not line.startswith(" "):
+            k, _, v = line.partition(":")
+            fm[k.strip()] = v.strip()
+    return fm
+
+
+# ---------- linking ----------
+def link(src, dst):
+    if os.path.islink(dst):
+        if os.path.realpath(dst) == os.path.realpath(src):
+            return "same"
+        os.unlink(dst)
+    elif os.path.exists(dst):
+        return "blocked"
+    os.symlink(src, dst)
+    return "linked"
+
+def link_plugins():
+    os.makedirs(SKILLS_DIR, exist_ok=True)
+    for p in plugin_dirs():
+        r = link(os.path.join(PLUGINS_DIR, p), os.path.join(SKILLS_DIR, p))
+        if r == "blocked":
+            warn(f"{p}: ~/.claude/skills/{p} exists and is not a symlink — left alone")
+        else:
+            ok(f"plugin {p} ({'already linked' if r == 'same' else 'linked'}) → loads as {p}@skills-dir")
+
+def link_rules():
+    target = os.path.join(CLAUDE_HOME, "CLAUDE.md")
+    line = f"@{GLOBAL_RULES}"
+    existing = open(target).read() if os.path.exists(target) else ""
+    if line in existing:
+        ok("global rules already imported in ~/.claude/CLAUDE.md")
+        return
+    block = ("\n" if existing and not existing.endswith("\n") else "") + \
+            ("\n" if existing else "") + "# Engineering OS (managed by `eos`; edit the imported file, not this line)\n" + line + "\n"
+    with open(target, "a") as f:
+        f.write(block)
+    ok(f"~/.claude/CLAUDE.md now imports {GLOBAL_RULES}")
+
+
+# ---------- install ----------
+def install_community(pairs):
+    by_repo = defaultdict(list)
+    for _, e in pairs:
+        repo, skill = parse_entry(e)
+        if skill_installed(skill):
+            continue
+        local = os.path.join(AGENTS_SKILLS, skill)
+        if os.path.isfile(os.path.join(local, "SKILL.md")):
+            link(local, os.path.join(SKILLS_DIR, skill))
+            ok(f"{skill} (linked from ~/.agents/skills)")
+            continue
+        by_repo[repo].append(skill)
+    if not by_repo:
+        ok("all registry skills present")
+        return
+    if not shutil.which("npx"):
+        err("npx not found — install Node.js to fetch community skills")
+        return
+    for repo, skills in by_repo.items():
+        print(f"  fetching {repo}: {', '.join(skills)}")
+        r = run(["npx", "-y", "skills", "add", repo, "--skill", *skills, "-g", "-a", "claude-code", "-y"], quiet=True)
+        for s in skills:
+            (ok if skill_installed(s) else err)(f"{s} ({repo})")
+        if r is not None and r.returncode != 0:
+            warn(f"skills CLI exited {r.returncode} for {repo}")
+
+def install_plugins(reg, domains):
+    have = installed_plugins()
+    for d, spec in reg["domains"].items():
+        if domains and d not in domains:
+            continue
+        for p in spec.get("plugins", []):
+            if p in have:
+                continue
+            mk = p.split("@", 1)[1] if "@" in p else ""
+            print(f"  installing plugin {p}")
+            r = run(["claude", "plugin", "install", p], quiet=True)
+            if r is None or r.returncode != 0:
+                warn(f"{p}: could not install (add its marketplace first: claude plugin marketplace add <source> — '{mk}')")
+            else:
+                ok(f"plugin {p}")
+
+def cmd_install(a):
+    reg = load_registry()
+    domains = set(a.domain) if a.domain else None
+    head("1. Domain plugins")
+    link_plugins()
+    head("2. Global rules")
+    link_rules()
+    if not a.skip_community:
+        head("3. Community skills" + (" (core + optional)" if a.all else " (core)"))
+        install_community(entries(reg, domains, include_optional=a.all))
+        head("4. Marketplace plugins")
+        install_plugins(reg, domains)
+    head("Done. Restart Claude Code (or /clear won't be enough — start a new session) to load everything.")
+
+def cmd_enable(a):
+    reg = load_registry()
+    if a.domain not in reg["domains"]:
+        err(f"unknown domain {a.domain}; have: {', '.join(reg['domains'])}")
+        sys.exit(1)
+    install_community(entries(reg, {a.domain}, include_optional=True))
+
+
+# ---------- add / remove ----------
+def cmd_add(a):
+    if "@" not in a.entry or "/" not in a.entry.split("@")[0]:
+        err("format: owner/repo@skill   (find candidates with: npx skills find <query>)")
+        sys.exit(1)
+    reg = load_registry()
+    d = a.domain
+    if d not in reg["domains"]:
+        reg["domains"][d] = {"description": "", "core": [], "optional": [], "plugins": []}
+        warn(f"created new registry domain '{d}' (consider `eos new-domain {d}` for its own playbook)")
+    tier = "optional" if a.optional else "core"
+    for spec in reg["domains"].values():
+        for t in ("core", "optional"):
+            if a.entry in spec.get(t, []):
+                warn(f"{a.entry} already in registry")
+                install_community([(d, a.entry)])
+                return
+    reg["domains"][d][tier].append(a.entry)
+    save_registry(reg)
+    ok(f"added {a.entry} to {d}.{tier}")
+    install_community([(d, a.entry)])
+    _, skill = parse_entry(a.entry)
+    audit_paths([os.path.join(SKILLS_DIR, skill)])
+
+def cmd_remove(a):
+    reg = load_registry()
+    hit = False
+    for spec in reg["domains"].values():
+        for t in ("core", "optional"):
+            keep = [e for e in spec.get(t, []) if parse_entry(e)[1] != a.skill]
+            if len(keep) != len(spec.get(t, [])):
+                spec[t] = keep
+                hit = True
+    if hit:
+        save_registry(reg)
+        ok(f"removed {a.skill} from registry")
+    p = os.path.join(SKILLS_DIR, a.skill)
+    if os.path.islink(p):
+        os.unlink(p)
+        ok(f"unlinked ~/.claude/skills/{a.skill}")
+    elif os.path.isdir(p):
+        trash = os.path.join(SKILLS_DIR, ".trash")
+        os.makedirs(trash, exist_ok=True)
+        shutil.move(p, os.path.join(trash, a.skill))
+        ok(f"moved ~/.claude/skills/{a.skill} to ~/.claude/skills/.trash/")
+    elif not hit:
+        warn(f"{a.skill} not found")
+
+
+# ---------- scaffolding ----------
+SKILL_TEMPLATE = os.path.join(EOS_HOME, "templates", "skill", "SKILL.md")
+
+def cmd_new_skill(a):
+    plugin = a.domain if a.domain.startswith("eos-") else f"eos-{a.domain}"
+    pdir = os.path.join(PLUGINS_DIR, plugin)
+    if not os.path.isdir(pdir):
+        err(f"no plugin {plugin}; create it with: eos new-domain {a.domain.removeprefix('eos-')}")
+        sys.exit(1)
+    name = a.name.lower().replace(" ", "-")
+    sdir = os.path.join(pdir, "skills", name)
+    if os.path.exists(sdir):
+        err(f"{sdir} already exists")
+        sys.exit(1)
+    os.makedirs(os.path.join(sdir, "references"))
+    tpl = open(SKILL_TEMPLATE).read()
+    desc = a.description or f"TODO: what {name} does AND when to use it (be specific and a little pushy about triggers)."
+    open(os.path.join(sdir, "SKILL.md"), "w").write(tpl.replace("{{name}}", name).replace("{{description}}", desc))
+    ok(f"created {sdir}/SKILL.md")
+    print(f"  Next: write it (or ask Claude: \"use skill-creator to write and eval {plugin}:{name}\"), then `eos validate`.")
+    print(f"  It loads as {plugin}:{name} in your next Claude Code session — no install step.")
+
+def cmd_new_domain(a):
+    name = a.name.lower().removeprefix("eos-")
+    plugin = f"eos-{name}"
+    pdir = os.path.join(PLUGINS_DIR, plugin)
+    if os.path.exists(pdir):
+        err(f"{pdir} exists")
+        sys.exit(1)
+    os.makedirs(os.path.join(pdir, ".claude-plugin"))
+    os.makedirs(os.path.join(pdir, "skills"))
+    manifest = {"name": plugin, "version": "0.1.0",
+                "description": a.description or f"Engineering OS — {name} domain",
+                "author": {"name": "Engineering OS"}, "keywords": ["engineering-os", name]}
+    json.dump(manifest, open(os.path.join(pdir, ".claude-plugin", "plugin.json"), "w"), indent=2)
+    reg = load_registry()
+    reg["domains"].setdefault(name, {"description": a.description or "", "core": [], "optional": [], "plugins": []})
+    save_registry(reg)
+    ok(f"created plugin {plugin} and registry domain '{name}'")
+    cmd_sync(a)
+    print(f"  Next: eos new-skill {name} {name}-playbook")
+
+
+def cmd_sync(_a=None):
+    mk = json.load(open(MARKETPLACE))
+    plugins = []
+    for p in plugin_dirs():
+        m = json.load(open(os.path.join(PLUGINS_DIR, p, ".claude-plugin", "plugin.json")))
+        plugins.append({"name": m["name"], "source": f"./plugins/{p}",
+                        "description": m.get("description", ""), "version": m.get("version", "0.1.0")})
+    mk["plugins"] = plugins
+    with open(MARKETPLACE, "w") as f:
+        json.dump(mk, f, indent=2)
+        f.write("\n")
+    ok(f"marketplace.json lists {len(plugins)} plugins")
+    link_plugins()
+
+
+# ---------- status / validate / audit / doctor ----------
+def cmd_status(_a):
+    reg = load_registry()
+    head("Domain plugins")
+    for p in plugin_dirs():
+        dst = os.path.join(SKILLS_DIR, p)
+        linked = os.path.islink(dst) and os.path.realpath(dst) == os.path.realpath(os.path.join(PLUGINS_DIR, p))
+        skills = sorted(os.listdir(os.path.join(PLUGINS_DIR, p, "skills"))) if os.path.isdir(os.path.join(PLUGINS_DIR, p, "skills")) else []
+        (ok if linked else warn)(f"{p:26} {'linked' if linked else 'NOT linked'}   skills: {', '.join(skills) or '—'}")
+    head("Registry skills")
+    total = missing = 0
+    for d, spec in reg["domains"].items():
+        core = [parse_entry(e)[1] for e in spec.get("core", [])]
+        opt = [parse_entry(e)[1] for e in spec.get("optional", [])]
+        miss = [s for s in core if not skill_installed(s)]
+        on_opt = [s for s in opt if skill_installed(s)]
+        total += len(core)
+        missing += len(miss)
+        line = f"{d:20} core {len(core) - len(miss)}/{len(core)}   optional on {len(on_opt)}/{len(opt)}"
+        (ok if not miss else warn)(line + (f"   missing: {', '.join(miss)}" if miss else ""))
+    rules = os.path.join(CLAUDE_HOME, "CLAUDE.md")
+    head("Global rules")
+    (ok if os.path.exists(rules) and GLOBAL_RULES in open(rules).read() else warn)("~/.claude/CLAUDE.md imports engineering-os/CLAUDE.md")
+    n_user = len([d for d in os.listdir(SKILLS_DIR) if not d.startswith(".") and os.path.isfile(os.path.join(SKILLS_DIR, d, "SKILL.md"))])
+    print(f"\n{n_user} standalone skills in ~/.claude/skills · {total - missing}/{total} core registry skills installed")
+    if missing:
+        print("Run `eos install` to fetch missing skills.")
+
+def cmd_validate(_a):
+    bad = 0
+    head("Skill frontmatter")
+    for p in plugin_dirs():
+        sroot = os.path.join(PLUGINS_DIR, p, "skills")
+        for s in sorted(os.listdir(sroot)) if os.path.isdir(sroot) else []:
+            fm = frontmatter(os.path.join(sroot, s, "SKILL.md"))
+            if not fm or not fm.get("name") or not fm.get("description"):
+                err(f"{p}/{s}: missing name/description frontmatter"); bad += 1
+            elif fm["name"] != s:
+                err(f"{p}/{s}: frontmatter name '{fm['name']}' != directory '{s}'"); bad += 1
+            elif "TODO" in fm["description"]:
+                warn(f"{p}/{s}: description still TODO")
+            elif len(fm["description"]) > 1024:
+                warn(f"{p}/{s}: description > 1024 chars")
+            else:
+                ok(f"{p}:{s}")
+    head("Claude Code validator")
+    if shutil.which("claude"):
+        for target in [EOS_HOME] + [os.path.join(PLUGINS_DIR, p) for p in plugin_dirs()]:
+            r = run(["claude", "plugin", "validate", target], quiet=True)
+            name = os.path.relpath(target, EOS_HOME) if target != EOS_HOME else "marketplace"
+            if r and r.returncode == 0:
+                ok(name)
+            else:
+                bad += 1
+                err(f"{name}: {(r.stdout + r.stderr).strip()[-600:] if r else 'claude not runnable'}")
+    hooks = os.path.join(PLUGINS_DIR, "eos-core", "hooks")
+    head("Hook scripts compile")
+    for f in sorted(os.listdir(hooks)):
+        if f.endswith(".py"):
+            r = run([sys.executable, "-m", "py_compile", os.path.join(hooks, f)], quiet=True)
+            (ok if r.returncode == 0 else err)(f)
+            bad += r.returncode != 0
+    sys.exit(1 if bad else 0)
+
+RISKY = [
+    (r"curl[^\n|]*\|\s*(ba|z)?sh", "pipes remote script to shell"),
+    (r"base64\s+(-d|--decode)", "decodes base64 payloads"),
+    (r"ignore (all )?(previous|prior) instructions", "prompt-injection phrasing"),
+    (r"(~|\$HOME)/\.(ssh|aws|config/gh)|id_rsa|\.npmrc", "touches credential files"),
+    (r"(nc|ncat)\s+-e|/dev/tcp/", "reverse shell pattern"),
+    (r"eval\s*\(\s*(atob|Buffer\.from)", "obfuscated eval"),
+    (r"https?://(\d{1,3}\.){3}\d{1,3}", "raw-IP URL"),
+]
+
+def audit_paths(paths):
+    flagged = 0
+    for root in paths:
+        for dp, _, files in os.walk(root, followlinks=True):
+            for fn in files:
+                if not fn.endswith((".md", ".sh", ".py", ".js", ".ts", ".mjs", ".json")):
+                    continue
+                fp = os.path.join(dp, fn)
+                try:
+                    txt = open(fp, errors="ignore").read(400_000)
+                except Exception:
+                    continue
+                for pat, why in RISKY:
+                    m = re.search(pat, txt, re.I)
+                    if m:
+                        flagged += 1
+                        line = txt[:m.start()].count("\n") + 1
+                        warn(f"{os.path.relpath(fp, SKILLS_DIR)}:{line}  {why}: {m.group(0)[:80]!r}")
+    if not flagged:
+        ok(f"no risky patterns in {len(paths)} skill(s)")
+    else:
+        print("  Review flagged lines — many are legitimate (e.g. docs that *warn* about curl|sh).")
+    return flagged
+
+def cmd_audit(_a):
+    reg = load_registry()
+    names = [parse_entry(e)[1] for _, e in entries(reg, include_optional=True)]
+    paths = [os.path.join(SKILLS_DIR, n) for n in names if skill_installed(n)]
+    head(f"Auditing {len(paths)} installed community skills")
+    audit_paths(paths)
+
+def cmd_doctor(_a):
+    head("Prerequisites")
+    for tool in ("claude", "node", "npx", "git", "python3"):
+        (ok if shutil.which(tool) else err)(f"{tool}: {shutil.which(tool) or 'missing'}")
+    head("Harness")
+    (ok if os.path.isdir(SKILLS_DIR) else err)(f"skills dir {SKILLS_DIR}")
+    (ok if os.path.exists(MARKETPLACE) else err)("marketplace.json present")
+    on_path = shutil.which("eos")
+    (ok if on_path else warn)(f"eos on PATH: {on_path or 'no — run: ln -s ' + os.path.realpath(__file__) + ' ~/.local/bin/eos'}")
+    cmd_status(_a)
+
+
+def main():
+    ap = argparse.ArgumentParser(prog="eos", description="Engineering OS manager", formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
+    sp = ap.add_subparsers(dest="cmd", required=True)
+    p = sp.add_parser("install"); p.add_argument("--all", action="store_true"); p.add_argument("--domain", action="append"); p.add_argument("--skip-community", action="store_true"); p.set_defaults(f=cmd_install)
+    sp.add_parser("status").set_defaults(f=cmd_status)
+    p = sp.add_parser("add"); p.add_argument("entry"); p.add_argument("--domain", required=True); p.add_argument("--optional", action="store_true"); p.set_defaults(f=cmd_add)
+    p = sp.add_parser("enable"); p.add_argument("domain"); p.set_defaults(f=cmd_enable)
+    p = sp.add_parser("remove"); p.add_argument("skill"); p.set_defaults(f=cmd_remove)
+    p = sp.add_parser("new-skill"); p.add_argument("domain"); p.add_argument("name"); p.add_argument("-d", "--description"); p.set_defaults(f=cmd_new_skill)
+    p = sp.add_parser("new-domain"); p.add_argument("name"); p.add_argument("-d", "--description"); p.set_defaults(f=cmd_new_domain)
+    sp.add_parser("sync").set_defaults(f=cmd_sync)
+    sp.add_parser("validate").set_defaults(f=cmd_validate)
+    sp.add_parser("audit").set_defaults(f=cmd_audit)
+    sp.add_parser("doctor").set_defaults(f=cmd_doctor)
+    a = ap.parse_args()
+    a.f(a)
+
+
+if __name__ == "__main__":
+    main()

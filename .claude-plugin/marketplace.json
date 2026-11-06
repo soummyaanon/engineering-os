@@ -1,0 +1,51 @@
+{
+  "name": "engineering-os",
+  "owner": {
+    "name": "Soumyaranjan Panda"
+  },
+  "description": "Engineering OS: a global Claude Code harness \u2014 skills, hooks, and playbooks for frontend, backend, AI, reverse engineering, GTM, and research.",
+  "plugins": [
+    {
+      "name": "eos-ai",
+      "source": "./plugins/eos-ai",
+      "description": "Engineering OS AI engineering: LLM features, agents, MCP, RAG, cost/latency, and LLM evals.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "eos-backend",
+      "source": "./plugins/eos-backend",
+      "description": "Engineering OS backend playbook: APIs, databases, auth, payments, reliability, and security with a verification bar.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "eos-core",
+      "source": "./plugins/eos-core",
+      "description": "Engineering OS core: global hooks (session briefing, destructive-command + secret guards, opt-in autoformat, notifications), the skill router map, and the workflow for growing the harness.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "eos-frontend",
+      "source": "./plugins/eos-frontend",
+      "description": "Engineering OS frontend playbook: build, polish, and verify web UI (React/Next.js/Tailwind), routing to the best design and performance skills.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "eos-gtm",
+      "source": "./plugins/eos-gtm",
+      "description": "Engineering OS go-to-market: positioning, ICP, pricing, launch, demos, channels, and routing to specialist marketing skills.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "eos-research",
+      "source": "./plugins/eos-research",
+      "description": "Engineering OS research: decision-ready, source-cited research briefs and a parallel researcher agent.",
+      "version": "0.1.0"
+    },
+    {
+      "name": "eos-reverse-engineering",
+      "source": "./plugins/eos-reverse-engineering",
+      "description": "Engineering OS reverse engineering: codebase archaeology, API/network mapping, protocols, binaries (authorized), and product teardowns.",
+      "version": "0.1.0"
+    }
+  ]
+}

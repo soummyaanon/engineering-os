@@ -1,0 +1,177 @@
+{
+  "$comment": "Engineering OS skill registry. 'core' installs by default; 'optional' only via `eos enable <domain>` or `eos install --all`. Entries are owner/repo@skill (skills.sh / npx skills). 'plugins' are Claude Code marketplace plugins. Vetting bar: official vendor or well-known author, >=1K installs, no install-time scripts. Add with `eos add <owner/repo@skill> --domain <d>`.",
+  "version": 1,
+  "domains": {
+    "core": {
+      "description": "Harness, skill management, engineering process",
+      "core": [
+        "vercel-labs/skills@find-skills",
+        "anthropics/skills@skill-creator",
+        "Forward-Future/loop-library@loop-library",
+        "walkinglabs/learn-harness-engineering@harness-creator",
+        "addyosmani/agent-skills@security-and-hardening",
+        "addyosmani/agent-skills@observability-and-instrumentation",
+        "vercel-labs/agent-skills@writing-guidelines"
+      ],
+      "optional": [
+        "addyosmani/agent-skills@spec-driven-development",
+        "addyosmani/agent-skills@git-workflow-and-versioning",
+        "addyosmani/agent-skills@ci-cd-and-automation",
+        "addyosmani/agent-skills@documentation-and-adrs",
+        "addyosmani/agent-skills@deprecation-and-migration"
+      ],
+      "plugins": [
+        "superpowers@claude-plugins-official",
+        "feature-dev@claude-plugins-official",
+        "plugin-dev@claude-plugins-official",
+        "claude-code-setup@claude-plugins-official",
+        "typescript-lsp@claude-plugins-official"
+      ]
+    },
+    "frontend": {
+      "description": "UI, design quality, React/Next.js, accessibility, performance",
+      "core": [
+        "vercel-labs/agent-skills@vercel-react-best-practices",
+        "vercel-labs/agent-skills@vercel-composition-patterns",
+        "vercel-labs/agent-skills@web-design-guidelines",
+        "shadcn-ui/ui@shadcn",
+        "wshobson/agents@nextjs-app-router-patterns",
+        "wshobson/agents@tailwind-design-system",
+        "wshobson/agents@typescript-advanced-types",
+        "addyosmani/web-quality-skills@accessibility",
+        "addyosmani/web-quality-skills@performance",
+        "leonxlnx/taste-skill@design-taste-frontend",
+        "Leonxlnx/taste-skill@industrial-brutalist-ui",
+        "nextlevelbuilder/ui-ux-pro-max-skill@ui-ux-pro-max",
+        "wheresryan22/anatomy@anatomy",
+        "pbakaus/impeccable@teach-impeccable",
+        "pbakaus/impeccable@frontend-design",
+        "pbakaus/impeccable@critique",
+        "pbakaus/impeccable@audit",
+        "pbakaus/impeccable@polish",
+        "pbakaus/impeccable@typeset",
+        "pbakaus/impeccable@arrange",
+        "pbakaus/impeccable@colorize",
+        "pbakaus/impeccable@clarify",
+        "pbakaus/impeccable@quieter",
+        "pbakaus/impeccable@bolder",
+        "pbakaus/impeccable@delight",
+        "pbakaus/impeccable@animate",
+        "pbakaus/impeccable@adapt",
+        "pbakaus/impeccable@harden",
+        "pbakaus/impeccable@normalize",
+        "pbakaus/impeccable@optimize",
+        "pbakaus/impeccable@distill",
+        "pbakaus/impeccable@extract",
+        "pbakaus/impeccable@onboard",
+        "pbakaus/impeccable@overdrive"
+      ],
+      "optional": [
+        "emilkowalski/skills@animation-performance",
+        "vercel-labs/agent-skills@vercel-react-view-transitions",
+        "vercel-labs/agent-skills@vercel-react-native-skills",
+        "vercel-labs/agent-skills@deploy-to-vercel"
+      ],
+      "plugins": [
+        "frontend-design@claude-plugins-official",
+        "playwright@claude-plugins-official",
+        "superdesign@claude-plugins-official"
+      ]
+    },
+    "backend": {
+      "description": "APIs, databases, auth, payments, infra",
+      "core": [
+        "supabase/agent-skills@supabase-postgres-best-practices",
+        "addyosmani/agent-skills@api-and-interface-design",
+        "fastapi/fastapi@fastapi",
+        "github/awesome-copilot@multi-stage-dockerfile",
+        "better-auth/skills@better-auth-best-practices",
+        "better-auth/skills@better-auth-security-best-practices",
+        "better-auth/skills@create-auth-skill",
+        "better-auth/skills@email-and-password-best-practices",
+        "better-auth/skills@organization-best-practices",
+        "better-auth/skills@two-factor-authentication-best-practices"
+      ],
+      "optional": [
+        "supabase/agent-skills@supabase",
+        "hashicorp/agent-skills@terraform-style-guide",
+        "wshobson/agents@fastapi-templates"
+      ],
+      "plugins": [
+        "stripe@claude-plugins-official"
+      ]
+    },
+    "ai": {
+      "description": "LLM apps, agents, MCP, evals, automation",
+      "core": [
+        "anthropics/skills@mcp-builder",
+        "wshobson/agents@prompt-engineering-patterns",
+        "addyosmani/agent-skills@context-engineering"
+      ],
+      "optional": [
+        "wshobson/agents@rag-implementation",
+        "langchain-ai/langchain-skills@langchain-rag"
+      ],
+      "plugins": [
+        "agent-sdk-dev@claude-plugins-official",
+        "pydantic-ai@claude-plugins-official",
+        "huggingface-skills@claude-plugins-official",
+        "typesafe@typesafe-ai"
+      ]
+    },
+    "reverse-engineering": {
+      "description": "Codebase archaeology, APIs, protocols, binaries, product teardowns",
+      "core": [
+        "wshobson/agents@protocol-reverse-engineering",
+        "coreyhaines31/marketingskills@reverse-engineer-marketing"
+      ],
+      "optional": [],
+      "plugins": []
+    },
+    "gtm": {
+      "description": "Positioning, pricing, copy, launch, SEO, outbound, analytics",
+      "core": [
+        "coreyhaines31/marketingskills@product-marketing",
+        "coreyhaines31/marketingskills@marketing-psychology",
+        "coreyhaines31/marketingskills@copywriting",
+        "coreyhaines31/marketingskills@copy-editing",
+        "coreyhaines31/marketingskills@cro",
+        "coreyhaines31/marketingskills@pricing",
+        "coreyhaines31/marketingskills@launch",
+        "coreyhaines31/marketingskills@marketing-plan",
+        "coreyhaines31/marketingskills@content-strategy",
+        "coreyhaines31/marketingskills@seo-audit",
+        "coreyhaines31/marketingskills@ai-seo",
+        "coreyhaines31/marketingskills@cold-email",
+        "coreyhaines31/marketingskills@analytics"
+      ],
+      "optional": [
+        "coreyhaines31/marketingskills@ab-testing",
+        "coreyhaines31/marketingskills@ads",
+        "coreyhaines31/marketingskills@ad-creative",
+        "coreyhaines31/marketingskills@programmatic-seo",
+        "coreyhaines31/marketingskills@schema",
+        "coreyhaines31/marketingskills@emails",
+        "coreyhaines31/marketingskills@lead-magnets",
+        "coreyhaines31/marketingskills@referrals",
+        "coreyhaines31/marketingskills@churn-prevention",
+        "coreyhaines31/marketingskills@paywalls",
+        "coreyhaines31/marketingskills@signup",
+        "coreyhaines31/marketingskills@social",
+        "coreyhaines31/marketingskills@public-relations",
+        "coreyhaines31/marketingskills@sales-enablement",
+        "coreyhaines31/marketingskills@aso"
+      ],
+      "plugins": []
+    },
+    "research": {
+      "description": "Source-backed research, competitors, customers",
+      "core": [
+        "coreyhaines31/marketingskills@competitor-profiling",
+        "coreyhaines31/marketingskills@customer-research"
+      ],
+      "optional": [],
+      "plugins": []
+    }
+  }
+}

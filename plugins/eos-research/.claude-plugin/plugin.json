@@ -1,0 +1,13 @@
+{
+  "name": "eos-research",
+  "version": "0.1.0",
+  "description": "Engineering OS research: decision-ready, source-cited research briefs and a parallel researcher agent.",
+  "author": {
+    "name": "Soumyaranjan Panda"
+  },
+  "license": "MIT",
+  "keywords": [
+    "engineering-os",
+    "research"
+  ]
+}

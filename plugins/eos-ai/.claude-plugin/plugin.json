@@ -1,0 +1,13 @@
+{
+  "name": "eos-ai",
+  "version": "0.1.0",
+  "description": "Engineering OS AI engineering: LLM features, agents, MCP, RAG, cost/latency, and LLM evals.",
+  "author": {
+    "name": "Soumyaranjan Panda"
+  },
+  "license": "MIT",
+  "keywords": [
+    "engineering-os",
+    "ai"
+  ]
+}
