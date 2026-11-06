@@ -21,8 +21,8 @@ Frontend work fails in two ways: it doesn't work (state bugs, hydration errors, 
 | New UI with no strong existing style; "make it distinctive / premium" | `frontend-design:frontend-design`, then `ui-ux-pro-max` for palette/type/layout systems |
 | React/Next.js performance, data fetching, bundle size, re-renders | `vercel-react-best-practices` |
 | Next.js App Router structure, server/client components, caching | `nextjs-app-router-patterns` |
-| Review UI against web interface guidelines / accessibility | `web-design-guidelines`, then `audit` |
-| Polishing an existing screen | `critique` → then the matching fix: `polish`, `typeset`, `arrange`, `colorize`, `clarify`, `quieter`/`bolder`, `delight`, `animate`, `adapt` (responsive), `harden` (edge cases/errors), `normalize` (consistency), `optimize` (perf), `distill` (simplify) |
+| Review UI against web interface guidelines / accessibility | `web-design-guidelines`, then `impeccable` (audit) |
+| Critiquing or polishing an existing screen | `impeccable` — critique/audit first, then its matching fix: polish, typeset, arrange, colorize, clarify, quieter/bolder, delight, animate, adapt (responsive), harden (edge cases), normalize, optimize, distill, extract (design system), onboard |
 | Isometric/technical explainer illustration | `anatomy` |
 | Charts, dashboards, KPI tiles | `dataviz` |
 | Auth screens / flows | `better-auth-best-practices` (+ eos:backend for the server side) |

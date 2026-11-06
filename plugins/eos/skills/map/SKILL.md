@@ -36,7 +36,7 @@ Playbooks: `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:reverse` 
 
 | Domain | Playbook | Notable specialists |
 |---|---|---|
-| Frontend / UI / design | `eos:frontend` | `frontend-design:frontend-design`, `vercel-react-best-practices`, `nextjs-app-router-patterns`, `shadcn`, `tailwind-design-system`, `web-design-guidelines`, `accessibility`, impeccable set (`critique`, `polish`, `audit`, `typeset`, `animate`…), `ui-ux-pro-max`, `design-taste-frontend`, `anatomy`, `dataviz` |
+| Frontend / UI / design | `eos:frontend` | `frontend-design:frontend-design`, `vercel-react-best-practices`, `nextjs-app-router-patterns`, `shadcn`, `tailwind-design-system`, `web-design-guidelines`, `accessibility`, `impeccable` (critique, audit, polish, typeset, animate…), `ui-ux-pro-max`, `design-taste-frontend`, `anatomy`, `dataviz` |
 | Backend / data / infra | `eos:backend` | `supabase-postgres-best-practices`, `api-and-interface-design`, `fastapi`, `multi-stage-dockerfile`, better-auth set, `stripe:stripe-best-practices`, `engineering:system-design`, `engineering:deploy-checklist`, `observability-and-instrumentation` |
 | AI / agents / automation | `eos:ai` | `claude-api`, `eos:evals`, `mcp-builder`, `prompt-engineering-patterns`, `context-engineering`, `agent-sdk-dev:new-sdk-app`, `ai:building-pydantic-ai-agents`, `using-coding-agents-as-llm`, `typesafe:typesafe-ai`, huggingface-skills, `loop`, `schedule` |
 | Reverse engineering | `eos:reverse` | `protocol-reverse-engineering`, `reverse-engineer-marketing`, `feature-dev:code-explorer` agent, `playwright` plugin (network capture) |
