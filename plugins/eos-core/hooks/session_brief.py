@@ -105,6 +105,14 @@ def main():
         lines.append("No project stack detected (not a code repo, or a new one).")
     lines.append("Route any task through the `eos-core:eos` skill map when unsure which skill fits. "
                  "Non-code domains: eos-gtm:gtm-strategy, eos-research:research, eos-reverse-engineering:reverse-engineering.")
+    home = os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude")
+    try:
+        rules_on = "engineering-os" in open(os.path.join(home, "CLAUDE.md")).read()
+    except Exception:
+        rules_on = False
+    if not rules_on:
+        lines.append("Engineering OS setup is incomplete on this machine (no global rules / community skills): "
+                     "suggest the user run /eos-core:setup once.")
     if is_git and not has_claude_md:
         lines.append("This repo has no CLAUDE.md; offer to create one (/init) if the user will work here repeatedly.")
     print(" ".join(lines))

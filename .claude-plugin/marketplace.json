@@ -21,7 +21,7 @@
       "name": "eos-core",
       "source": "./plugins/eos-core",
       "description": "Engineering OS core: global hooks (session briefing, destructive-command + secret guards, opt-in autoformat, notifications), the skill router map, and the workflow for growing the harness.",
-      "version": "0.1.0"
+      "version": "0.1.1"
     },
     {
       "name": "eos-frontend",

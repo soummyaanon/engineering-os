@@ -59,15 +59,18 @@ Or just ask Claude: *"add a skill for X"* / `/eos-core:add-skill X` — it uses 
 
 ## Share it
 
-Others can install just the plugins via the marketplace:
+**Option A — plugin marketplace** (requires Node.js + Python 3):
 
 ```bash
 claude plugin marketplace add soummyaanon/engineering-os
-claude plugin install eos-core@engineering-os
-claude plugin install eos-frontend@engineering-os   # …and any other domains
+for p in core frontend backend ai reverse-engineering gtm research; do claude plugin install eos-$p@engineering-os; done
 ```
 
-…or clone and run `bin/eos install` for the full experience (rules + community skills).
+Start Claude Code and run **`/eos-core:setup`** once — it installs the curated community skills and the global rules (the session briefing reminds you until it's done). Update later with `claude plugin marketplace update engineering-os`.
+
+**Option B — clone** (best if you'll customize it): `git clone` + `bin/eos install`, as in *Install* above. Edits are live.
+
+Don't use both on one machine — the plugins would load twice.
 
 ## Vetting bar for community skills
 
