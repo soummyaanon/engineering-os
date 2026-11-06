@@ -14,7 +14,7 @@ To see what's actually installed right now: `/eos:status` (or `eos status` in a 
 ## Engineering OS commands
 
 `/eos:map <task>` which skill to use · `/eos:add <need>` grow the harness · `/eos:status` health · `/eos:setup` one-time setup (marketplace installs)
-Playbooks: `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:reverse` `/eos:gtm` `/eos:research`
+Playbooks: `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:deploy` `/eos:reverse` `/eos:gtm` `/eos:research`
 
 ## Process — how to work
 
@@ -41,8 +41,9 @@ Playbooks: `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:reverse` 
 | AI / agents / automation | `eos:ai` | `claude-api`, `ai-sdk`, `eos:evals`, `mcp-builder`, `prompt-engineering-patterns`, `context-engineering`, `agent-sdk-dev:new-sdk-app`, `ai:building-pydantic-ai-agents`, `using-coding-agents-as-llm`, `typesafe:typesafe-ai`, huggingface-skills, `loop`, `schedule` |
 | Reverse engineering | `eos:reverse` | `protocol-reverse-engineering`, `reverse-engineer-marketing`, `feature-dev:code-explorer` agent, `playwright` plugin (network capture) |
 | Research | `eos:research` | `eos:researcher` agent (fan out), `anthropic-skills:deep-research`, `competitor-profiling`, `customer-research`, `huggingface-skills:huggingface-papers` |
-| GTM / marketing / sales | `eos:gtm` | `product-marketing`, `marketing-psychology`, `copywriting`, `copy-editing`, `cro`, `pricing`, `launch`, `marketing-plan`, `content-strategy`, `seo-audit`, `ai-seo`, `cold-email`, `analytics` |
+| GTM / marketing / sales | `eos:gtm` | `product-marketing`, `marketing-psychology`, `copywriting`, `copy-editing`, `cro`, `pricing`, `launch`, `marketing-plan`, `content-strategy`, `seo-audit`, `ai-seo`, `cold-email`, `analytics`, Remotion video (`remotion-create`, `remotion-render`) |
 
+| Deploy / CI / infra | `eos:deploy` | `deploy-to-vercel`, `aws-deployment`, `aws-cdk`, `azure-prepare`/`azure-deploy`/`azure-validate`, `github-actions-templates`; on demand: Cloudflare, Firebase, Netlify, Railway, Terraform |
 | Mobile (Expo / React Native) | `eos enable mobile` | `vercel-react-native-skills`, `react-native-best-practices`, Expo skills |
 
 ## Documents, decks, and pages

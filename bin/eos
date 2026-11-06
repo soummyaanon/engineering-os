@@ -150,15 +150,35 @@ def link_rules():
 
 
 # ---------- install ----------
+_LOCK = None
+
+def local_source(skill):
+    """Source repo of a skill installed by the skills CLI into ~/.agents/skills (from its lock file), lowercased."""
+    global _LOCK
+    if _LOCK is None:
+        try:
+            d = json.load(open(os.path.join(os.path.dirname(AGENTS_SKILLS), ".skill-lock.json")))
+            _LOCK = d.get("skills", d)
+        except Exception:
+            _LOCK = {}
+    return str((_LOCK.get(skill) or {}).get("source", "")).lower()
+
 def install_community(pairs):
     by_repo = defaultdict(list)
     for _, e in pairs:
         repo, skill = parse_entry(e)
+        dst = os.path.join(SKILLS_DIR, skill)
         if skill_installed(skill):
-            continue
+            # a same-named skill from a different author must not stand in for the registry's pick
+            if os.path.islink(dst) and os.path.realpath(dst).startswith(os.path.realpath(AGENTS_SKILLS)) \
+                    and local_source(skill) and local_source(skill) != repo.lower():
+                os.unlink(dst)
+                warn(f"{skill}: replacing copy from {local_source(skill)} with {repo}")
+            else:
+                continue
         local = os.path.join(AGENTS_SKILLS, skill)
-        if os.path.isfile(os.path.join(local, "SKILL.md")):
-            link(local, os.path.join(SKILLS_DIR, skill))
+        if os.path.isfile(os.path.join(local, "SKILL.md")) and local_source(skill) == repo.lower():
+            link(local, dst)
             ok(f"{skill} (linked from ~/.agents/skills)")
             continue
         by_repo[repo].append(skill)

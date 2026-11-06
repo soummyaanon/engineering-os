@@ -18,7 +18,9 @@ Frontend work fails in two ways: it doesn't work (state bugs, hydration errors, 
 
 | Situation | Skill |
 |---|---|
-| New UI with no strong existing style; "make it distinctive / premium" | `frontend-design:frontend-design`, `design-taste-frontend`, then `ui-ux-pro-max` (+ its `design-system`) for palette, type and layout systems |
+| New UI with no strong existing style; "make it distinctive / premium" | `frontend-design` (Anthropic), `design-taste-frontend`, then `ui-ux-pro-max` (+ its `design-system`) for palette, type and layout systems |
+| Design-engineering polish: the details that make UI feel crafted | `emil-design-eng`, `apple-design`; on demand: `review-animations`, `improve-animations`, `find-animation-opportunities`, `prototype`, `pick-ui-library` |
+| Posters, hero art, visual assets, OG images | `canvas-design`, `anatomy` (isometric technical figures); `theme-factory` on demand |
 | Design system / tokens / component library | `design-system`, `tailwind-design-system`, `shadcn`, `vercel-composition-patterns` |
 | React/Next.js performance, data fetching, bundle size, re-renders | `vercel-react-best-practices`, `core-web-vitals`, `performance` |
 | Next.js App Router structure, server/client components, caching | `nextjs-app-router-patterns` |
@@ -28,7 +30,9 @@ Frontend work fails in two ways: it doesn't work (state bugs, hydration errors, 
 | Review UI against web interface guidelines / accessibility | `web-design-guidelines`, `accessibility`, then `impeccable` (audit) |
 | Critiquing or polishing an existing screen | `impeccable`: critique/audit first, then the matching fix (polish, typeset, arrange, colorize, clarify, quieter/bolder, delight, animate, adapt, harden, normalize, optimize, distill, extract, onboard) |
 | Unit / component tests | `vitest` |
-| End-to-end tests | `e2e-testing-patterns` + the `playwright` plugin |
+| End-to-end tests | `e2e-testing-patterns`, `webapp-testing` (Anthropic) + the `playwright` plugin |
+| Driving a real browser to check your work | `agent-browser` (Vercel) or the `playwright` plugin |
+| Shipping it | `/eos:deploy` (`deploy-to-vercel` for most frontends) |
 | Isometric/technical explainer illustration | `anatomy` |
 | Charts, dashboards, KPI tiles | `dataviz` |
 | Auth screens / flows | `better-auth-best-practices` (+ `/eos:backend` for the server side) |

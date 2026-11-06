@@ -39,6 +39,8 @@ Value metric first (what scales with value they get: seats, usage, outcomes), th
 | Funnel/event tracking | `analytics` |
 | Full marketing plan | `marketing-plan` |
 | Decks / one-pagers | `anthropic-skills:pptx`, `anthropic-skills:docx`, Artifact slides |
+| Product / launch / demo video | Remotion: `remotion-best-practices`, `remotion-create`, `remotion-render` (see §5b); on demand: `remotion-captions`, `hyperframes` (HeyGen) |
+| An app whose product *is* video generation | `remotion-saas` (on demand) |
 
 ## 5. Demo playbook (for a live product demo)
 
@@ -46,6 +48,19 @@ Value metric first (what scales with value they get: seats, usage, outcomes), th
 - One golden path, rehearsed, with **seeded realistic data** and a reset script. Have a recorded backup video.
 - Show the before/after metric. End with a single clear ask (pilot, next meeting, sign-up).
 - Pre-flight: fresh browser profile, notifications off, zoom 125%, stable network, all accounts logged in, error states not reachable from the golden path.
+
+## 5b. Product video playbook (Remotion)
+
+Videos are code: React components rendered to MP4, so they're versionable and easy to regenerate when the product changes.
+
+1. **Script first** (30–60s): hook in the first 3 seconds (the pain), the aha moment, 2–3 proof beats, one call to action. Write it with `copywriting`.
+2. **Storyboard** each beat as a scene with duration, on-screen text, and the real product UI to show. Capture real screens (Playwright screenshots or screen recordings of the actual app); don't fake UI.
+3. **Build** with `remotion-create`, following `remotion-best-practices`: one composition per format, scenes as components, timing from a single config, brand tokens shared with the website.
+4. **Captions** (`remotion-captions`, on demand): most social video plays muted.
+5. **Render** with `remotion-render`: 16:9 for the site and YouTube, 1:1 or 4:5 for X and LinkedIn, 9:16 for Shorts/Reels/TikTok.
+6. **Check**: watch the whole render at 1× before calling it done; confirm text is readable on a phone.
+
+Remotion needs a company license for some commercial uses; check remotion.dev/license before shipping for a business.
 
 ## 6. Metrics
 

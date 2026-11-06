@@ -23,17 +23,21 @@ Backend bugs are expensive because they corrupt data, leak data, or fail silentl
 | Serverless Postgres / branching | `neon-postgres` |
 | Caching, queues, rate limiting | `upstash-redis-js`, `upstash-ratelimit-js` |
 | API and interface design | `api-and-interface-design` |
+| Node.js / TypeScript service structure | `nodejs-backend-patterns`; NestJS: `nestjs-best-practices` (on demand) |
+| Schema and data migrations, zero-downtime | `database-migration` + `supabase-postgres-best-practices` |
+| Background jobs, queues, scheduled work | `upstash-qstash-js`, `python-background-jobs` (on demand) |
 | FastAPI | `fastapi` |
 | Auth (sessions, OAuth, 2FA, orgs/teams, email+password) | `better-auth-best-practices`, `better-auth-security-best-practices`, `create-auth`, `two-factor-authentication-best-practices`, `organization-best-practices`, `email-and-password-best-practices` |
-| Payments, subscriptions, webhooks | `stripe:stripe-best-practices` |
-| Hardening, OWASP, dependency risk | `security-and-hardening`, then `security-review` on the diff |
+| Payments, subscriptions, webhooks | `stripe-best-practices` (Stripe's own) |
+| Hardening, OWASP, dependency risk | `security-and-hardening`, then `security-review` on the diff; `api-security-testing` on demand |
+| Firebase (auth, Firestore) | `firebase-basics`, `firebase-auth-basics` (on demand) |
 | Logging, metrics, tracing, alerts | `observability-and-instrumentation` |
 | Containers | `multi-stage-dockerfile` |
 | Convex, MongoDB, Redis, Cloudflare Workers, Hono, Clerk, Sentry, AWS, GitHub Actions | `eos enable backend` installs the official skills for these |
 | Building an MCP server | `mcp-builder` |
 | System/architecture decisions, ADRs | `engineering:system-design`, `engineering:architecture` |
 | Production incident | `engineering:incident-response`, then `superpowers:systematic-debugging` |
-| Deploy readiness | `engineering:deploy-checklist` |
+| Deploying (Vercel, AWS, Azure, Cloudflare, containers) | `/eos:deploy` |
 
 ## 3. API design
 

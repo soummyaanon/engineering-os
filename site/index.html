@@ -286,8 +286,8 @@
       <p>One command gives Claude Code, Codex, Cursor or any other agent the same vetted skills, safety guards and playbooks, in every project you open. It tells you when a new version ships.</p>
     </div>
     <div class="hero-meta" aria-label="What gets installed">
-      <div><b>9</b> playbooks</div>
-      <div><b>115</b> vetted skills</div>
+      <div><b>10</b> playbooks</div>
+      <div><b>162</b> vetted skills</div>
       <div><b>4</b> guards</div>
       <div><b>70+</b> agents</div>
     </div>
@@ -355,9 +355,9 @@
 
       <div class="status">
         <span class="live">ready</span>
-        <span class="opt">eos 0.3.0 · auto-update notices</span>
-        <span>9 playbooks</span>
-        <span class="opt">115 skills</span>
+        <span class="opt">eos 0.4.0 · auto-update notices</span>
+        <span>10 playbooks</span>
+        <span class="opt">162 skills</span>
         <span>4 guards</span>
         <span class="opt">MIT</span>
       </div>
@@ -374,12 +374,15 @@
       <p class="lead">Your agent loads them on its own when a task matches. Type them when you want to steer.</p>
     </div>
     <div class="grid3">
-      <div class="cell"><code>/eos:frontend</code><p>Vercel React rules, shadcn, ui-ux-pro-max, impeccable, GSAP, Vitest, a11y and Core Web Vitals.</p></div>
+      <div class="cell"><code>/eos:frontend</code><p>Anthropic frontend-design, Emil Kowalski, ui-ux-pro-max, impeccable, shadcn, GSAP, Vitest, a11y.</p></div>
       <div class="cell"><code>/eos:backend</code><p>Prisma, Supabase, Neon, Upstash, auth and payments. Nothing is done until it's been hit for real.</p></div>
       <div class="cell"><code>/eos:ai</code><p>Claude API, Vercel AI SDK, agents, MCP servers and RAG, with <code>/eos:evals</code> test sets.</p></div>
       <div class="cell"><code>/eos:reverse</code><p>Map unknown codebases, undocumented APIs, protocols and competitor products.</p></div>
+      <div class="cell"><code>/eos:deploy</code><p>Vercel, AWS and Azure official skills, CI/CD, rollbacks and post-deploy checks.</p></div>
       <div class="cell"><code>/eos:research</code><p>Decision-ready briefs with dated citations and a parallel researcher agent.</p></div>
-      <div class="cell"><code>/eos:gtm</code><p>Positioning, pricing, launch and demo playbooks, wired to the top marketing skills.</p></div>
+      <div class="cell"><code>/eos:gtm</code><p>Positioning, pricing, launch, and product videos as code with Remotion.</p></div>
+      <div class="cell"><code>/eos:evals</code><p>Real test sets for prompts, agents and RAG, with regression checks in CI.</p></div>
+      <div class="cell"><code>/eos:add</code><p>Need a skill? It finds the best one, vets it, and installs it everywhere you work.</p></div>
     </div>
   </section>
 
@@ -434,15 +437,16 @@
     "install.sh": { kind: "command", label: "Command" },
     "prompt.md": { kind: "prompt", label: "Prompt" },
     "CLAUDE.md": pb("Working rules", "Loaded in every project, for every agent.", ["Understand before changing; smallest correct change", "Evidence before claims: run it before saying done", "Branch, small commits, never force-push unasked"]),
-    "skills/map.md": pb("/eos:map <task>", "Tells the agent which skill or agent fits the task, then gets going.", ["Routes across 115 vetted skills and your plugins", "Process first (plan, debug, verify), then domain", "Try: <code>/eos:map build a pricing page</code>"]),
+    "skills/map.md": pb("/eos:map <task>", "Tells the agent which skill or agent fits the task, then gets going.", ["Routes across 162 vetted skills and your plugins", "Process first (plan, debug, verify), then domain", "Try: <code>/eos:map build a pricing page</code>"]),
     "skills/add.md": pb("/eos:add <need>", "Finds the best community skill for a need, or writes a new one with skill-creator.", ["Vets by source, installs and redundancy", "Records it in the registry so every machine gets it", "Can also add a hook or a whole new domain"]),
     "skills/frontend.md": pb("/eos:frontend", "Build, polish and verify web UI.", ["Vercel React and Next.js rules, shadcn, ui-ux-pro-max, GSAP", "impeccable for critique and polish, plus a11y and perf audits", "Screenshots at mobile and desktop before calling it done"]),
     "skills/backend.md": pb("/eos:backend", "APIs, databases, auth, payments and reliability.", ["Prisma, Supabase, Neon, Upstash, FastAPI, Better Auth, Stripe", "Authz on every resource, idempotent webhooks, safe migrations", "Hits the endpoint for real: happy path, bad input, wrong user"]),
     "skills/ai.md": pb("/eos:ai", "LLM features, agents, MCP servers and RAG.", ["Evals first, prompts second, architecture third", "Claude API, Agent SDK, MCP builder, prompt patterns", "Bounded loops, structured output, cost per call"]),
     "skills/evals.md": pb("/eos:evals", "Test sets for prompts, agents and RAG.", ["20–50 real cases, code checks before LLM judges", "Compares versions and catches regressions in CI"]),
     "skills/reverse.md": pb("/eos:reverse", "Understand systems you didn't build.", ["Codebase archaeology into an ARCHITECTURE.md", "Undocumented APIs into an OpenAPI spec", "Protocols, binaries (authorized) and product teardowns"]),
+    "skills/deploy.md": pb("/eos:deploy", "Ship to Vercel, AWS, Azure, Cloudflare and friends.", ["Picks the platform, or keeps the one you already use", "Official Vercel, AWS (deployment, CDK) and Azure skills", "Pre-deploy checklist, CI/CD, rollback, post-deploy verification"]),
     "skills/research.md": pb("/eos:research", "Decision-ready research with dated citations.", ["Frames the decision before searching", "Primary sources and parallel researcher agents", "Brief: recommendation, options table, evidence, risks"]),
-    "skills/gtm.md": pb("/eos:gtm", "Go-to-market for the things you build.", ["ICP, positioning, pricing, launch and demo playbooks", "Routes to copywriting, CRO, launch, cold email, analytics"]),
+    "skills/gtm.md": pb("/eos:gtm", "Go-to-market for the things you build.", ["ICP, positioning, pricing, launch and demo playbooks", "Product and launch videos as code with Remotion", "Routes to copywriting, CRO, launch, cold email, analytics"]),
     "hooks/bash-guard.py": pb("bash-guard", "Runs before every shell command, even in auto mode.", ["Blocks <code>rm -rf ~</code> and disk wipes", "Asks before force-push, push to main, <code>reset --hard</code>, DROP TABLE, <code>curl | sh</code>, publish, prod deploy", "Lets <code>rm -rf node_modules</code> through"]),
     "hooks/secret-guard.py": pb("secret-guard", "Runs before every file write.", ["Catches real-looking API keys, private keys and DB passwords", "<code>.env</code> files are allowed and placeholders are ignored"]),
   };
@@ -555,7 +559,7 @@
   // ---------- terminal demo: one orchestrated sequence ----------
   const SCRIPT = [
     ["in", "/eos:map build a pricing page with stripe checkout"],
-    ["dim", "  routing across 115 skills…"],
+    ["dim", "  routing across 162 skills…"],
     ["ok", "  <b>✓</b> <em>eos:frontend</em>         layout, polish, verify at 390 / 1440"],
     ["ok", "  <b>✓</b> <em>eos:backend</em>          prisma, checkout session, idempotent webhooks"],
     ["ok", "  <b>✓</b> <em>stripe-best-practices</em>  <em>impeccable</em>  <em>cro</em>"],

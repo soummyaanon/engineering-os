@@ -18,8 +18,8 @@ Works with Claude Code, Codex, Cursor, Gemini CLI, Copilot, Windsurf and 70+ oth
 
 3/
 What's inside:
-• 9 playbooks: /eos:frontend /eos:backend /eos:ai /eos:evals /eos:reverse /eos:research /eos:gtm
-• 115 vetted skills (Vercel, Supabase, Prisma, Anthropic, GSAP, shadcn, ui-ux-pro-max…)
+• 10 playbooks: /eos:frontend /eos:backend /eos:ai /eos:evals /eos:reverse /eos:research /eos:gtm
+• 162 vetted skills (Vercel, Supabase, Prisma, Anthropic, GSAP, shadcn, ui-ux-pro-max…)
 • /eos:map tells the agent which skill fits the task
 
 4/
@@ -47,8 +47,8 @@ I kept re-explaining the same things to Claude Code in every repo: how we verify
 
 Engineering OS is my attempt at a curated harness:
 
-- 9 playbooks (frontend, backend, AI, evals, reverse engineering, research, GTM) that route to the right specialist skills
-- 115 community skills from vendors and well-known authors (Vercel, Supabase, Prisma, Anthropic, GSAP, shadcn, Addy Osmani, Corey Haines…), only 65 installed by default to keep the agent's choices sharp
+- 10 playbooks (frontend, backend, AI, evals, reverse engineering, research, GTM) that route to the right specialist skills
+- 162 community skills from vendors and well-known authors (Vercel, Supabase, Prisma, Anthropic, GSAP, shadcn, Addy Osmani, Corey Haines…), only 84 installed by default to keep the agent's choices sharp
 - Hooks for Claude Code: a bash guard (blocks rm -rf ~, asks before force-push / DROP TABLE / curl | sh / prod deploys), a secret guard, stack detection, and update notices
 - Works for 70+ agents through the open skills format (Claude Code gets the hooks too)
 
@@ -58,7 +58,7 @@ I'd love feedback on the skill picks, especially areas where you know a better s
 
 ## Reddit (r/ClaudeAI, r/ChatGPTCoding, r/cursor)
 
-**Title:** I packaged my coding-agent setup into one command: 115 vetted skills, playbooks and safety guards (Claude Code, Codex, Cursor, 70+ agents)
+**Title:** I packaged my coding-agent setup into one command: 162 vetted skills, playbooks and safety guards (Claude Code, Codex, Cursor, 70+ agents)
 
 **Body:** Same as Show HN, shortened to the bullets. Lead with the guard hooks screenshot on r/ClaudeAI; lead with "works in Cursor/Codex too" on the others. Follow each sub's self-promo rules.
 
@@ -66,7 +66,7 @@ I'd love feedback on the skill picks, especially areas where you know a better s
 
 Coding agents are only as good as the setup around them.
 
-I packaged mine into Engineering OS: 9 playbooks, 115 vetted skills from the teams behind Vercel, Supabase, Prisma, Anthropic and GSAP, and guardrails that stop an agent from force-pushing to main or committing an API key, even in auto mode.
+I packaged mine into Engineering OS: 10 playbooks, 162 vetted skills from the teams behind Vercel, Supabase, Prisma, Anthropic and GSAP, and guardrails that stop an agent from force-pushing to main or committing an API key, even in auto mode.
 
 One command installs it for Claude Code, Codex, Cursor and 70+ other agents. Free and open source.
 
@@ -76,7 +76,7 @@ https://engineering-os-hazel.vercel.app
 
 - **Name:** Engineering OS
 - **Tagline (60):** One command to give any coding agent senior-engineer habits
-- **Description:** Engineering OS installs curated playbooks, 115 vetted skills and safety guards into Claude Code, Codex, Cursor and 70+ coding agents. Stack-aware, self-updating, open source.
+- **Description:** Engineering OS installs curated playbooks, 162 vetted skills and safety guards into Claude Code, Codex, Cursor and 70+ coding agents. Stack-aware, self-updating, open source.
 - **First comment:** the Show HN body, plus a GIF of the terminal demo.
 
 ## Checklist before posting

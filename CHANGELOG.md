@@ -2,6 +2,18 @@
 
 Update any time with `eos update` (or re-run the install command). Claude Code tells you when a new version is out.
 
+## 0.4.0 — 2026-11-07
+
+**New: `/eos:deploy`** — picks the platform (or keeps yours), runs a pre-deploy checklist, sets up CI/CD, and verifies after shipping. Official skills for **Vercel** (deploy), **AWS** (deployment, CDK) and **Azure** (prepare, deploy, validate), plus GitHub Actions templates. On demand (`eos enable deploy`): Cloudflare Workers, Firebase Hosting, Netlify, Railway, Terraform, AWS serverless/containers/IAM/Amplify, Azure diagnostics/AKS/App Service, Vercel optimize.
+
+**Product videos** — Remotion's official skills (best practices, create, render) and a script → storyboard → render workflow in `/eos:gtm`. On demand: Remotion captions and remotion-saas (for apps built on Remotion), HeyGen HyperFrames video.
+
+**Frontend** — Anthropic's frontend-design, canvas-design and webapp-testing; Vercel's agent-browser; Emil Kowalski's design-engineering and Apple-design skills. On demand: animation review/improve, prototyping, UI-library picker, theme factory.
+
+**Backend** — Node.js backend patterns, database migrations, Stripe's own best practices. On demand: NestJS, Firebase, microservices, background jobs, API security testing, QStash.
+
+The session briefing now recognises deploy targets (Vercel, AWS CDK, Azure, Terraform, Firebase, Netlify, Railway, Fly, GitHub Actions) and Remotion projects. 162 skills in total: 84 by default, 78 on demand.
+
 ## 0.3.0 — 2026-11-07
 
 **Top-tier stack skills**

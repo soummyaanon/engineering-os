@@ -50,17 +50,29 @@
         "emilkowalski/skills@animation-vocabulary",
         "addyosmani/web-quality-skills@core-web-vitals",
         "antfu/skills@vitest",
-        "wshobson/agents@e2e-testing-patterns"
+        "wshobson/agents@e2e-testing-patterns",
+        "anthropics/skills@frontend-design",
+        "anthropics/skills@canvas-design",
+        "anthropics/skills@webapp-testing",
+        "vercel-labs/agent-browser@agent-browser",
+        "emilkowalski/skills@emil-design-eng",
+        "emilkowalski/skills@apple-design"
       ],
       "optional": [
         "emilkowalski/skills@animation-performance",
         "vercel-labs/agent-skills@vercel-react-view-transitions",
-        "vercel-labs/agent-skills@deploy-to-vercel",
         "greensock/gsap-skills@gsap-performance",
         "cloudai-x/threejs-skills@threejs-fundamentals",
         "cloudai-x/threejs-skills@threejs-animation",
         "cloudai-x/threejs-skills@threejs-shaders",
-        "arvindrk/extract-design-system@extract-design-system"
+        "arvindrk/extract-design-system@extract-design-system",
+        "anthropics/skills@theme-factory",
+        "emilkowalski/skills@review-animations",
+        "emilkowalski/skills@improve-animations",
+        "emilkowalski/skills@find-animation-opportunities",
+        "emilkowalski/skills@prototype",
+        "emilkowalski/skills@pick-ui-library",
+        "wshobson/agents@web-component-design"
       ],
       "plugins": [
         "frontend-design@claude-plugins-official",
@@ -90,22 +102,28 @@
         "supabase/agent-skills@supabase",
         "neondatabase/agent-skills@neon-postgres",
         "upstash/skills@upstash-redis-js",
-        "upstash/skills@upstash-ratelimit-js"
+        "upstash/skills@upstash-ratelimit-js",
+        "wshobson/agents@nodejs-backend-patterns",
+        "wshobson/agents@database-migration",
+        "stripe/ai@stripe-best-practices"
       ],
       "optional": [
-        "hashicorp/agent-skills@terraform-style-guide",
         "wshobson/agents@fastapi-templates",
         "prisma/skills@prisma-postgres",
         "convex/agent-skills@convex",
         "mongodb/agent-skills@mongodb-query-optimizer",
         "redis/agent-skills@redis-core",
-        "cloudflare/skills@workers-best-practices",
         "honojs/skills@hono",
         "clerk/skills@clerk-setup",
         "clerk/skills@clerk-nextjs-patterns",
         "getsentry/sentry-for-ai@sentry-sdk-setup",
-        "aws/agent-toolkit-for-aws@aws-serverless",
-        "wshobson/agents@github-actions-templates"
+        "kadajett/agent-nestjs-skills@nestjs-best-practices",
+        "firebase/agent-skills@firebase-basics",
+        "firebase/agent-skills@firebase-auth-basics",
+        "wshobson/agents@microservices-patterns",
+        "wshobson/agents@python-background-jobs",
+        "usestrix/strix@api-security-testing",
+        "upstash/skills@upstash-qstash-js"
       ],
       "plugins": [
         "stripe@claude-plugins-official"
@@ -114,8 +132,9 @@
         "Prisma",
         "Supabase",
         "Convex",
-        "Cloudflare Workers",
-        "Hono"
+        "Hono",
+        "NestJS",
+        "Firebase"
       ]
     },
     "ai": {
@@ -142,6 +161,60 @@
         "LangChain"
       ]
     },
+    "deploy": {
+      "description": "Shipping to Vercel, AWS, Azure, Cloudflare and friends",
+      "signals": [
+        "Cloudflare Workers",
+        "Firebase",
+        "Netlify",
+        "AWS CDK",
+        "Azure",
+        "Terraform"
+      ],
+      "core": [
+        "vercel-labs/agent-skills@deploy-to-vercel",
+        "aws/agent-toolkit-for-aws@aws-deployment",
+        "aws/agent-toolkit-for-aws@aws-cdk",
+        "microsoft/azure-skills@azure-prepare",
+        "microsoft/azure-skills@azure-deploy",
+        "microsoft/azure-skills@azure-validate",
+        "wshobson/agents@github-actions-templates"
+      ],
+      "optional": [
+        "vercel-labs/agent-skills@vercel-optimize",
+        "vercel-labs/agent-skills@vercel-cli-with-tokens",
+        "aws/agent-toolkit-for-aws@aws-serverless",
+        "aws/agent-toolkit-for-aws@aws-iam",
+        "aws/agent-toolkit-for-aws@aws-containers",
+        "aws/agent-toolkit-for-aws@aws-amplify",
+        "aws/agent-toolkit-for-aws@architect-for-startups",
+        "microsoft/azure-skills@azure-diagnostics",
+        "microsoft/azure-skills@azure-kubernetes",
+        "microsoft/azure-skills@python-appservice-deploy",
+        "cloudflare/skills@workers-best-practices",
+        "firebase/agent-skills@firebase-hosting-basics",
+        "netlify/context-and-tools@netlify-deploy",
+        "railwayapp/railway-skills@use-railway",
+        "hashicorp/agent-skills@terraform-style-guide"
+      ],
+      "plugins": []
+    },
+    "mobile": {
+      "description": "iOS/Android with Expo and React Native",
+      "signals": [
+        "Expo",
+        "React Native"
+      ],
+      "core": [],
+      "optional": [
+        "expo/skills@expo-dev-client",
+        "expo/skills@expo-upgrade",
+        "expo/skills@expo-router",
+        "vercel-labs/agent-skills@vercel-react-native-skills",
+        "callstackincubator/agent-skills@react-native-best-practices"
+      ],
+      "plugins": []
+    },
     "reverse-engineering": {
       "description": "Codebase archaeology, APIs, protocols, binaries, product teardowns",
       "core": [
@@ -166,7 +239,10 @@
         "coreyhaines31/marketingskills@seo-audit",
         "coreyhaines31/marketingskills@ai-seo",
         "coreyhaines31/marketingskills@cold-email",
-        "coreyhaines31/marketingskills@analytics"
+        "coreyhaines31/marketingskills@analytics",
+        "remotion-dev/skills@remotion-best-practices",
+        "remotion-dev/skills@remotion-create",
+        "remotion-dev/skills@remotion-render"
       ],
       "optional": [
         "coreyhaines31/marketingskills@ab-testing",
@@ -183,9 +259,16 @@
         "coreyhaines31/marketingskills@social",
         "coreyhaines31/marketingskills@public-relations",
         "coreyhaines31/marketingskills@sales-enablement",
-        "coreyhaines31/marketingskills@aso"
+        "coreyhaines31/marketingskills@aso",
+        "remotion-dev/skills@remotion-captions",
+        "remotion-dev/skills@remotion-markup",
+        "heygen-com/hyperframes@hyperframes",
+        "remotion-dev/skills@remotion-saas"
       ],
-      "plugins": []
+      "plugins": [],
+      "signals": [
+        "Remotion"
+      ]
     },
     "research": {
       "description": "Source-backed research, competitors, customers",
@@ -194,22 +277,6 @@
         "coreyhaines31/marketingskills@customer-research"
       ],
       "optional": [],
-      "plugins": []
-    },
-    "mobile": {
-      "description": "iOS/Android with Expo and React Native",
-      "signals": [
-        "Expo",
-        "React Native"
-      ],
-      "core": [],
-      "optional": [
-        "expo/skills@expo-dev-client",
-        "expo/skills@expo-upgrade",
-        "expo/skills@expo-router",
-        "vercel-labs/agent-skills@vercel-react-native-skills",
-        "callstackincubator/agent-skills@react-native-best-practices"
-      ],
       "plugins": []
     }
   },

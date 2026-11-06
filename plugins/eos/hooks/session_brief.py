@@ -22,7 +22,8 @@ JS_SIGNALS = {
     "better-auth": ("Better Auth", "backend"), "stripe": ("Stripe", "backend"), "trpc": ("tRPC", "backend"),
     "@anthropic-ai/sdk": ("Anthropic SDK", "ai"), "@anthropic-ai/claude-agent-sdk": ("Claude Agent SDK", "ai"),
     "openai": ("OpenAI SDK", "ai"), "ai": ("Vercel AI SDK", "ai"), "langchain": ("LangChain", "ai"),
-    "@langchain/core": ("LangChain", "ai"), "@modelcontextprotocol/sdk": ("MCP", "ai"), "@mastra/core": ("Mastra", "ai"), "convex": ("Convex", "backend"),
+    "@langchain/core": ("LangChain", "ai"), "@modelcontextprotocol/sdk": ("MCP", "ai"), "@mastra/core": ("Mastra", "ai"), "convex": ("Convex", "backend"), "remotion": ("Remotion", "gtm"), "firebase": ("Firebase", "backend"),
+    "firebase-admin": ("Firebase", "backend"), "aws-cdk-lib": ("AWS CDK", "deploy"),
     "playwright": ("Playwright", "frontend"), "@playwright/test": ("Playwright", "frontend"),
 }
 PY_SIGNALS = {
@@ -37,7 +38,10 @@ FILE_SIGNALS = {
     "Dockerfile": ("Docker", "backend"), "docker-compose.yml": ("Docker Compose", "backend"),
     "compose.yaml": ("Docker Compose", "backend"), "supabase": ("Supabase", "backend"),
     "Package.swift": ("Swift", "frontend"), "shopify.theme.toml": ("Shopify theme", "frontend"),
-    "wrangler.toml": ("Cloudflare Workers", "backend"), "vercel.json": ("Vercel", "frontend"),
+    "wrangler.toml": ("Cloudflare Workers", "deploy"), "vercel.json": ("Vercel", "deploy"),
+    "firebase.json": ("Firebase", "deploy"), "netlify.toml": ("Netlify", "deploy"), "cdk.json": ("AWS CDK", "deploy"),
+    "azure.yaml": ("Azure", "deploy"), "main.tf": ("Terraform", "deploy"), "railway.json": ("Railway", "deploy"),
+    "fly.toml": ("Fly.io", "deploy"), ".github/workflows": ("GitHub Actions", "deploy"),
 }
 
 PLAYBOOKS = {
@@ -45,6 +49,8 @@ PLAYBOOKS = {
     "backend": "eos:backend",
     "ai": "eos:ai",
     "research": "eos:research",
+    "deploy": "eos:deploy",
+    "gtm": "eos:gtm",
 }
 
 
@@ -117,13 +123,13 @@ def main():
     lines = ["[Engineering OS] active."]
     if found:
         lines.append("Stack detected: " + ", ".join(dict.fromkeys(found)) + ".")
-        books = [PLAYBOOKS[d] for d in ("frontend", "backend", "ai", "research") if d in domains]
+        books = [PLAYBOOKS[d] for d in ("frontend", "backend", "ai", "deploy", "gtm", "research") if d in domains]
         if books:
             lines.append("Relevant playbooks (load before domain work): " + ", ".join(books) + ".")
     else:
         lines.append("No project stack detected (not a code repo, or a new one).")
     lines.append("Route any task through the `eos:map` skill map when unsure which skill fits. "
-                 "Non-code domains: eos:gtm, eos:research, eos:reverse.")
+                 "Shipping: eos:deploy. Non-code domains: eos:gtm, eos:research, eos:reverse.")
     home = os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude")
     try:
         rules_on = "engineering-os" in open(os.path.join(home, "CLAUDE.md")).read()
