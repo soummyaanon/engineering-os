@@ -1,0 +1,36 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 6 * * 1"   # Mondays: catch upstream skill renames before users do
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Installer syntax
+        run: bash -n install.sh
+      - name: Hook scripts compile
+        run: python -m py_compile plugins/eos/hooks/*.py bin/eos
+      - name: Bash guard behaves
+        run: |
+          cd plugins/eos/hooks
+          check() { out=$(printf '{"cwd":"/tmp","tool_input":{"command":%s}}' "$(python -c 'import json,sys;print(json.dumps(sys.argv[1]))' "$1")" | python bash_guard.py); got=$(echo "$out" | python -c 'import json,sys;s=sys.stdin.read();print(json.loads(s)["hookSpecificOutput"]["permissionDecision"] if s.strip() else "pass")'); [ "$got" = "$2" ] || { echo "FAIL: '$1' -> $got (want $2)"; exit 1; }; echo "ok: $1 -> $got"; }
+          check "rm -rf ~" deny
+          check "git push --force origin main" ask
+          check "rm -rf node_modules" pass
+          check "npm test" pass
+      - name: Every registry skill still exists upstream
+        run: python bin/eos verify

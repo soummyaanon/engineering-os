@@ -11,12 +11,17 @@ LLM features fail differently from normal code: they work on the demo prompt and
 
 | Situation | Skill |
 |---|---|
-| Anything using the Claude API / Anthropic SDK (model ids, caching, tool use, streaming, batching) | `claude-api` — read it before writing code; never quote model ids or prices from memory |
+| Anything using the Claude API / Anthropic SDK (model ids, caching, tool use, streaming, batching) | `claude-api`: read it before writing code; never quote model ids or prices from memory |
+| Vercel AI SDK (streaming UI, tool calls, multi-provider) | `ai-sdk` |
 | Building an agent on the Claude Agent SDK | `agent-sdk-dev:new-sdk-app`, then verify with the `agent-sdk-verifier-*` agents |
 | Pydantic AI agents | `ai:building-pydantic-ai-agents` |
+| LangGraph agents | `langgraph-fundamentals` (optional: `eos enable ai`) |
 | Building an MCP server | `mcp-builder` |
+| Prompt design and debugging | `prompt-engineering-patterns` |
+| What the agent sees: context, rules files, memory | `context-engineering` |
 | An app that should run on the user's Claude Code/Codex subscription | `using-coding-agents-as-llm` |
 | Typed judgments / classification primitives | `typesafe:typesafe-ai` |
+| Voice (TTS/STT) | `text-to-speech` (optional: `eos enable ai`) |
 | Picking an open model, local inference, fine-tuning, HF Spaces | `huggingface-skills:huggingface-best`, `huggingface-local-models`, `huggingface-llm-trainer`, `huggingface-spaces` |
 | Writing evals for an LLM feature | `eos:evals` |
 | Recurring / scheduled automation | `loop`, `schedule`, `loop-library` |

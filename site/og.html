@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Engineering OS — social card</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #161618; }
+  .card {
+    width: 1200px; height: 630px; box-sizing: border-box; position: relative; overflow: hidden;
+    background: #161618; color: #dcdcdf; font-family: "IBM Plex Sans", sans-serif;
+    padding: 64px 72px; display: grid; grid-template-columns: 1fr 470px; gap: 48px; align-items: center;
+  }
+  .card::before {
+    content: ""; position: absolute; right: -120px; top: 40px; width: 760px; height: 560px;
+    background: radial-gradient(closest-side, rgba(168,139,250,.30), transparent); filter: blur(30px);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font: 500 22px "JetBrains Mono", monospace; color: #a3a3ab; }
+  .brand svg { width: 30px; height: 30px; }
+  h1 { margin: 34px 0 22px; font-weight: 600; font-size: 70px; line-height: 1.02; letter-spacing: -.035em; color: #f1f1f3; }
+  h1 i { display: inline-block; width: 30px; height: 58px; background: #a88bfa; vertical-align: -6px; margin-left: 6px; }
+  p { margin: 0; font-size: 25px; line-height: 1.45; color: #a3a3ab; max-width: 30ch; }
+  .win { position: relative; background: #1c1c1f; border: 1px solid #3a3a40; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px -30px #000; font: 16px/1.7 "JetBrains Mono", monospace; }
+  .bar { height: 38px; background: #161618; border-bottom: 1px solid #2e2e33; display: flex; align-items: center; gap: 8px; padding: 0 14px; }
+  .bar i { width: 11px; height: 11px; border-radius: 50%; background: #3a3a40; }
+  .body { padding: 20px 22px 22px; }
+  .in { color: #dcdcdf; } .in::before { content: "› "; color: #a88bfa; }
+  .dim { color: #6f6f78; }
+  .ok b { color: #5bb974; font-weight: 500; } .ok em { color: #c4b1ff; font-style: normal; } .ok { color: #a3a3ab; }
+  .warn { color: #e0a53b; }
+  .cmd { margin-top: 18px; padding: 14px 16px; background: #161618; border: 1px solid #3a3a40; border-radius: 9px; color: #dcdcdf; font-size: 15px; }
+  .cmd span { color: #a88bfa; }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div style="position:relative">
+    <div class="brand"><svg viewBox="0 0 32 32"><path d="M16 4l10 6v12l-10 6-10-6V10z" fill="none" stroke="#a88bfa" stroke-width="2.2" stroke-linejoin="round"/><path d="M16 11l5 3v6l-5 3-5-3v-6z" fill="#a88bfa"/></svg>engineering-os</div>
+    <h1>The operating system for your coding agent<i></i></h1>
+    <p>Vetted skills, safety guards and playbooks for Claude Code, Codex, Cursor and 70+ agents. One command.</p>
+  </div>
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i></div>
+    <div class="body">
+      <div class="in">/eos:map build a pricing page</div>
+      <div class="dim">  routing across 115 skills…</div>
+      <div class="ok">  <b>✓</b> <em>eos:frontend</em>  <em>impeccable</em></div>
+      <div class="ok">  <b>✓</b> <em>eos:backend</em>   <em>prisma</em>  <em>stripe</em></div>
+      <div class="in">git push --force origin main</div>
+      <div class="warn">  ⚠ bash-guard: confirm? [y/N]</div>
+      <div class="cmd"><span>$</span> curl -fsSL …/install | bash</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

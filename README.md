@@ -1,89 +1,118 @@
+<p align="center">
+  <a href="https://engineering-os-hazel.vercel.app"><img src="site/og.png" alt="Engineering OS — the operating system for your coding agent" width="100%"></a>
+</p>
+
+<p align="center">
+  <a href="https://engineering-os-hazel.vercel.app"><img alt="Install page" src="https://img.shields.io/badge/install-one%20command-a88bfa?style=flat-square&labelColor=161618"></a>
+  <img alt="Version" src="https://img.shields.io/github/package-json/v/soummyaanon/engineering-os?filename=plugins%2Feos%2F.claude-plugin%2Fplugin.json&style=flat-square&labelColor=161618&color=a88bfa&label=version">
+  <img alt="Skills" src="https://img.shields.io/badge/vetted%20skills-115-5bb974?style=flat-square&labelColor=161618">
+  <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%2070%2B-dcdcdf?style=flat-square&labelColor=161618">
+  <a href="https://github.com/soummyaanon/engineering-os/actions/workflows/verify.yml"><img alt="verify" src="https://img.shields.io/github/actions/workflow/status/soummyaanon/engineering-os/verify.yml?branch=main&style=flat-square&labelColor=161618&label=skills%20verified%20weekly"></a>
+  <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-dcdcdf?style=flat-square&labelColor=161618"></a>
+  <a href="https://github.com/soummyaanon/engineering-os/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/soummyaanon/engineering-os?style=flat-square&labelColor=161618&color=e0a53b"></a>
+</p>
+
 # Engineering OS
 
-A global harness for coding agents: curated skills, safety hooks, and playbooks that load in **every project** — frontend, backend, AI, reverse engineering, research, and GTM — and grow by dropping in new skills.
+**Your coding agent, set up like a senior engineer's, in every project — with one command.**
 
-**→ https://engineering-os-hazel.vercel.app** (copy the command or the prompt)
-
-## Install — one command
+Coding agents are only as good as the skills, rules and guardrails around them. Most people have none, or a pile of random ones Claude never reaches for. Engineering OS is a curated harness: the best community skills from the people who build the tools (Vercel, Supabase, Prisma, Anthropic, GSAP, shadcn…), playbooks that route to them, and guards that stop the expensive mistakes.
 
 ```bash
 curl -fsSL https://engineering-os-hazel.vercel.app/install | bash
 ```
 
-Installs everything for Claude Code: the `eos` plugin (playbooks + hooks), global working rules, ~50 vetted community skills, recommended plugins, and the `eos` CLI. Needs `git`, `node`, `python3`. Re-run any time to update. Add `-s -- --all` after `bash` for optional skills.
+Then open a new Claude Code session and type `/eos:map <what you're building>`.
 
-Then open a **new** Claude Code session and try `/eos:map <task>`.
-
-**Other coding agents** (Codex, Cursor, Gemini CLI, GitHub Copilot, Windsurf, OpenCode, Cline, Amp, and 60+ more):
+<details>
+<summary><b>Codex, Cursor, Gemini CLI, Copilot, Windsurf, OpenCode…</b></summary>
 
 ```bash
 curl -fsSL https://engineering-os-hazel.vercel.app/install | bash -s -- --agent codex
 ```
 
-They get the skills and the working rules (written to `~/.codex/AGENTS.md` / `~/.gemini/GEMINI.md` where known). Hooks are Claude Code only.
+Any of 70+ agent ids works (`cursor`, `gemini-cli`, `github-copilot`, `windsurf`, `opencode`, `cline`, `amp`, …). They get the skills and the working rules; guard hooks are Claude Code only.
 
-**Or paste a prompt** into any agent and let it install itself: https://engineering-os-hazel.vercel.app/prompt
+Or paste [this prompt](https://engineering-os-hazel.vercel.app/prompt) into any agent and it installs itself.
+</details>
 
-## Commands
+## What you get
 
-| Command | Does |
+| | |
 |---|---|
-| `/eos:map <task>` | which skill/agent to use for this task |
-| `/eos:add <need>` | find the best skill for a need (or write one) and add it |
-| `/eos:status` | what's installed / missing |
-| `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` | engineering playbooks |
-| `/eos:reverse` `/eos:research` `/eos:gtm` | reverse engineering, research, go-to-market |
+| 🧭 **9 playbooks** | `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:reverse` `/eos:research` `/eos:gtm`, plus `/eos:map` (which skill for this task?) and `/eos:add` (grow the harness). Each one knows the best specialist skills and the bar for "done". |
+| 📦 **115 vetted skills** | 65 installed by default, 50 more on demand with `eos enable <area>`. Official vendor or top author, ≥1K installs, not redundant. |
+| 🛡️ **Guards that run on every command** | Blocks `rm -rf ~`-class disasters. Asks before force-push, pushing to main, `reset --hard`, `DROP TABLE`, `curl \| sh`, publish and prod deploys. Stops real API keys landing in source. Works in auto mode. |
+| 🔎 **Stack-aware sessions** | Detects Next.js, Prisma, Supabase, FastAPI, the Anthropic SDK and more, and points the agent at the right playbook. Suggests the matching skill pack when your stack has one. |
+| 🔔 **Update notices** | Claude Code tells you when a new version ships. `eos update` pulls it. |
+| 📜 **Working rules** | Understand before changing, smallest correct change, evidence before "done", never force-push unasked — loaded in every project. |
 
-Claude also loads these on its own when a task matches — you rarely need to type them.
+## The skill set
 
-## Hooks (always on)
+**Frontend & UI/UX** — Vercel React & Next.js best practices, composition patterns, shadcn/ui (official), Tailwind design systems, **ui-ux-pro-max** + its design system, **impeccable** (critique → polish), design-taste-frontend, Web Interface Guidelines, accessibility, Core Web Vitals, **GSAP** core + ScrollTrigger (official), Emil Kowalski's animation vocabulary, TypeScript advanced types, **Vitest**, E2E testing patterns.
 
-| Hook | What it does | Opt-out |
-|---|---|---|
-| Session briefing | Detects the stack (Next.js, FastAPI, Prisma, Anthropic SDK…) and points Claude at the right playbooks | — |
-| Bash guard | **Blocks** catastrophic commands (`rm -rf ~`, disk wipes); **asks** before force-push, push to main, `reset --hard`, destructive SQL, `curl \| sh`, `sudo`, publish, prod deploys. `rm -rf node_modules` passes. | `EOS_GUARD=off` or `{"guard":"off"}` |
-| Secret guard | Asks before writing real-looking keys / private keys / DB passwords into source (`.env` allowed) | `{"secret_guard":"off"}` |
-| Autoformat | Formats edits with the project's own Prettier/Biome/Ruff/gofmt/rustfmt | **opt-in** `{"autoformat":true}` |
-| Notification | macOS notification when Claude needs you | `EOS_NOTIFY=off` |
+**Backend & data** — **Prisma** (official: ORM setup, client API, CLI), **Supabase** (official platform + Postgres best practices), **Neon** Postgres, **Upstash** Redis + rate limiting, API & interface design, FastAPI (official), Better Auth (×6), Stripe, security hardening, observability, multi-stage Dockerfiles.
 
-Per-project switches live in `<project>/.claude/eos.json`.
+**AI engineering** — Claude API, **Vercel AI SDK** (official), MCP builder (Anthropic), prompt-engineering patterns, context engineering, LLM evals.
+
+**Reverse engineering, research, GTM** — protocol reverse engineering, competitor profiling, customer research, and Corey Haines' marketing set: positioning, copywriting, CRO, pricing, launch, SEO + AI SEO, cold email, analytics.
+
+**On demand** (`eos enable <area>`) — **mobile**: Expo, React Native · **backend**: Convex, MongoDB, Redis, Cloudflare Workers, Hono, Clerk, Sentry, AWS, GitHub Actions · **frontend**: three.js, GSAP performance · **ai**: LangGraph, ElevenLabs · **gtm**: ads, A/B testing, programmatic SEO, and more.
+
+Full list with sources: [`registry/community.json`](registry/community.json).
 
 ## Grow it
 
 ```bash
-eos add owner/repo@skill --domain frontend   # adopt a community skill (registry + install + audit)
-eos new-skill stripe-webhooks                # your own skill → /eos:stripe-webhooks
-eos new-domain mobile -d "iOS/Android"       # new domain + playbook → /eos:mobile
-eos status · eos validate · eos audit · eos doctor
+eos add owner/repo@skill --domain frontend   # adopt a community skill (recorded, installed, audited)
+eos new-skill release-notes                  # your own skill → live next session as /eos:release-notes
+eos new-domain mobile -d "iOS/Android"       # a new area with its own playbook
+eos enable backend                           # turn on an area's on-demand pack
+eos update · eos status · eos verify · eos validate · eos audit · eos doctor
 ```
 
-Or just ask Claude: `/eos:add <need>`. New skills under `plugins/eos/skills/` are live next session — no reinstall.
+Or just ask your agent: `/eos:add stripe webhooks`. It searches the open skills directory, vets the candidates, and records the pick so every machine you install on gets it.
+
+## Hooks
+
+| Hook | Does | Off switch |
+|---|---|---|
+| bash-guard | Blocks catastrophic commands; asks before risky ones; lets `rm -rf node_modules` through | `EOS_GUARD=off` or `{"guard":"off"}` |
+| secret-guard | Asks before real-looking keys / private keys / DB passwords go into source (`.env` allowed) | `{"secret_guard":"off"}` |
+| session-brief | Stack detection, playbook routing, skill-pack and update notices | `EOS_UPDATE_CHECK=off` (updates only) |
+| autoformat | Formats edits with the project's own Prettier / Biome / Ruff / gofmt / rustfmt | opt-in `{"autoformat":true}` |
+| notify | macOS notification when the agent needs you | `EOS_NOTIFY=off` |
+
+Per-project switches go in `<project>/.claude/eos.json`.
+
+## FAQ
+
+**Will 115 skills make my agent worse at picking?** That's why only 65 install by default, and why playbooks exist: Claude loads one playbook, which names the one or two specialists that fit. Area packs stay off until your stack needs them.
+
+**Is it safe to pipe to bash?** Read it first: [`install.sh`](install.sh) (under 80 lines). It clones this repo to `~/engineering-os`, links one plugin, adds one import line to `~/.claude/CLAUDE.md`, and installs skills with the open `skills` CLI, which runs its own security scan. Community skills are also audited by `eos audit`.
+
+**How do I uninstall?** `rm ~/.claude/skills/eos`, delete the import line from `~/.claude/CLAUDE.md`, and remove skills you don't want with `eos remove <skill>`.
+
+**Can I use it without Claude Code?** Yes — any agent the open skills format supports gets the skills and rules.
 
 ## Layout
 
 ```
-engineering-os/
-├── install.sh                 # one-command installer
-├── CLAUDE.md                  # global working rules (imported by ~/.claude/CLAUDE.md)
-├── registry/community.json    # curated community skills by domain (core + optional)
-├── bin/eos                    # CLI
-└── plugins/eos/               # the plugin → /eos:*
-    ├── skills/                # map, add, frontend, backend, ai, evals, reverse, gtm, research
-    ├── agents/researcher.md
-    ├── commands/              # status, setup
-    └── hooks/                 # briefing, guards, autoformat, notify
+install.sh                  one-command installer
+CLAUDE.md                   global working rules
+registry/community.json     the curated skill list (core + on-demand, by area)
+bin/eos                     CLI
+plugins/eos/                the plugin → /eos:*
+  skills/                   map, add, frontend, backend, ai, evals, reverse, gtm, research
+  hooks/                    guards, session briefing, update check, autoformat, notify
+  agents/researcher.md
+site/                       install page (Vercel)
 ```
 
-## Alternative: plugin marketplace
+## Contributing
 
-```bash
-claude plugin marketplace add soummyaanon/engineering-os && claude plugin install eos@engineering-os
-```
+Suggest a skill with an issue or PR to `registry/community.json` — include the source, install count and why it beats what's there. Run `eos validate` before opening a PR. See [CHANGELOG.md](CHANGELOG.md) for what's new.
 
-Then run `/eos:setup` once inside Claude Code for the community skills and rules. Use either this or `install.sh`, not both.
+If Engineering OS saves you a mistake, a ⭐ helps other people find it.
 
-## Vetting bar for community skills
-
-Official vendor or well-known author · ≥1K installs (prefer ≥10K) · not redundant · SKILL.md read for off-task/unsafe instructions · `eos audit` clean. Quality over quantity: every skill description costs context and competes for Claude's attention.
-
-MIT licensed.
+MIT © Soumyaranjan Panda

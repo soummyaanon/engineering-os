@@ -18,14 +18,21 @@ Frontend work fails in two ways: it doesn't work (state bugs, hydration errors, 
 
 | Situation | Skill |
 |---|---|
-| New UI with no strong existing style; "make it distinctive / premium" | `frontend-design:frontend-design`, then `ui-ux-pro-max` for palette/type/layout systems |
-| React/Next.js performance, data fetching, bundle size, re-renders | `vercel-react-best-practices` |
+| New UI with no strong existing style; "make it distinctive / premium" | `frontend-design:frontend-design`, `design-taste-frontend`, then `ui-ux-pro-max` (+ its `design-system`) for palette, type and layout systems |
+| Design system / tokens / component library | `design-system`, `tailwind-design-system`, `shadcn`, `vercel-composition-patterns` |
+| React/Next.js performance, data fetching, bundle size, re-renders | `vercel-react-best-practices`, `core-web-vitals`, `performance` |
 | Next.js App Router structure, server/client components, caching | `nextjs-app-router-patterns` |
-| Review UI against web interface guidelines / accessibility | `web-design-guidelines`, then `impeccable` (audit) |
-| Critiquing or polishing an existing screen | `impeccable` — critique/audit first, then its matching fix: polish, typeset, arrange, colorize, clarify, quieter/bolder, delight, animate, adapt (responsive), harden (edge cases), normalize, optimize, distill, extract (design system), onboard |
+| TypeScript types that fight you | `typescript-advanced-types` |
+| Motion: micro-interactions, page transitions, scroll storytelling | `animation-vocabulary` (pick the right motion), `gsap-core` + `gsap-scrolltrigger` (build it), `impeccable` (animate) |
+| 3D / WebGL scenes | `threejs-fundamentals`, `threejs-shaders` (optional: `eos enable frontend`) |
+| Review UI against web interface guidelines / accessibility | `web-design-guidelines`, `accessibility`, then `impeccable` (audit) |
+| Critiquing or polishing an existing screen | `impeccable`: critique/audit first, then the matching fix (polish, typeset, arrange, colorize, clarify, quieter/bolder, delight, animate, adapt, harden, normalize, optimize, distill, extract, onboard) |
+| Unit / component tests | `vitest` |
+| End-to-end tests | `e2e-testing-patterns` + the `playwright` plugin |
 | Isometric/technical explainer illustration | `anatomy` |
 | Charts, dashboards, KPI tiles | `dataviz` |
-| Auth screens / flows | `better-auth-best-practices` (+ eos:backend for the server side) |
+| Auth screens / flows | `better-auth-best-practices` (+ `/eos:backend` for the server side) |
+| Mobile (Expo / React Native) | `eos enable mobile`, then `vercel-react-native-skills`, `react-native-best-practices`, Expo skills |
 | Shopify themes | `liquid-skills:shopify-liquid-themes` |
 | SEO for marketing pages | `seo-audit`, `ai-seo` |
 

@@ -43,18 +43,32 @@
         "leonxlnx/taste-skill@design-taste-frontend",
         "nextlevelbuilder/ui-ux-pro-max-skill@ui-ux-pro-max",
         "wheresryan22/anatomy@anatomy",
-        "pbakaus/impeccable@impeccable"
+        "pbakaus/impeccable@impeccable",
+        "nextlevelbuilder/ui-ux-pro-max-skill@design-system",
+        "greensock/gsap-skills@gsap-core",
+        "greensock/gsap-skills@gsap-scrolltrigger",
+        "emilkowalski/skills@animation-vocabulary",
+        "addyosmani/web-quality-skills@core-web-vitals",
+        "antfu/skills@vitest",
+        "wshobson/agents@e2e-testing-patterns"
       ],
       "optional": [
         "emilkowalski/skills@animation-performance",
         "vercel-labs/agent-skills@vercel-react-view-transitions",
-        "vercel-labs/agent-skills@vercel-react-native-skills",
-        "vercel-labs/agent-skills@deploy-to-vercel"
+        "vercel-labs/agent-skills@deploy-to-vercel",
+        "greensock/gsap-skills@gsap-performance",
+        "cloudai-x/threejs-skills@threejs-fundamentals",
+        "cloudai-x/threejs-skills@threejs-animation",
+        "cloudai-x/threejs-skills@threejs-shaders",
+        "arvindrk/extract-design-system@extract-design-system"
       ],
       "plugins": [
         "frontend-design@claude-plugins-official",
         "playwright@claude-plugins-official",
         "superdesign@claude-plugins-official"
+      ],
+      "signals": [
+        "three.js"
       ]
     },
     "backend": {
@@ -69,15 +83,39 @@
         "better-auth/skills@create-auth",
         "better-auth/skills@email-and-password-best-practices",
         "better-auth/skills@organization-best-practices",
-        "better-auth/skills@two-factor-authentication-best-practices"
+        "better-auth/skills@two-factor-authentication-best-practices",
+        "prisma/skills@prisma-client-api",
+        "prisma/skills@prisma-orm-setup",
+        "prisma/skills@prisma-cli",
+        "supabase/agent-skills@supabase",
+        "neondatabase/agent-skills@neon-postgres",
+        "upstash/skills@upstash-redis-js",
+        "upstash/skills@upstash-ratelimit-js"
       ],
       "optional": [
-        "supabase/agent-skills@supabase",
         "hashicorp/agent-skills@terraform-style-guide",
-        "wshobson/agents@fastapi-templates"
+        "wshobson/agents@fastapi-templates",
+        "prisma/skills@prisma-postgres",
+        "convex/agent-skills@convex",
+        "mongodb/agent-skills@mongodb-query-optimizer",
+        "redis/agent-skills@redis-core",
+        "cloudflare/skills@workers-best-practices",
+        "honojs/skills@hono",
+        "clerk/skills@clerk-setup",
+        "clerk/skills@clerk-nextjs-patterns",
+        "getsentry/sentry-for-ai@sentry-sdk-setup",
+        "aws/agent-toolkit-for-aws@aws-serverless",
+        "wshobson/agents@github-actions-templates"
       ],
       "plugins": [
         "stripe@claude-plugins-official"
+      ],
+      "signals": [
+        "Prisma",
+        "Supabase",
+        "Convex",
+        "Cloudflare Workers",
+        "Hono"
       ]
     },
     "ai": {
@@ -85,17 +123,23 @@
       "core": [
         "anthropics/skills@mcp-builder",
         "wshobson/agents@prompt-engineering-patterns",
-        "addyosmani/agent-skills@context-engineering"
+        "addyosmani/agent-skills@context-engineering",
+        "vercel/ai@ai-sdk"
       ],
       "optional": [
         "wshobson/agents@rag-implementation",
-        "langchain-ai/langchain-skills@langchain-rag"
+        "langchain-ai/langchain-skills@langchain-rag",
+        "langchain-ai/langchain-skills@langgraph-fundamentals",
+        "elevenlabs/skills@text-to-speech"
       ],
       "plugins": [
         "agent-sdk-dev@claude-plugins-official",
         "pydantic-ai@claude-plugins-official",
         "huggingface-skills@claude-plugins-official",
         "typesafe@typesafe-ai"
+      ],
+      "signals": [
+        "LangChain"
       ]
     },
     "reverse-engineering": {
@@ -150,6 +194,22 @@
         "coreyhaines31/marketingskills@customer-research"
       ],
       "optional": [],
+      "plugins": []
+    },
+    "mobile": {
+      "description": "iOS/Android with Expo and React Native",
+      "signals": [
+        "Expo",
+        "React Native"
+      ],
+      "core": [],
+      "optional": [
+        "expo/skills@expo-dev-client",
+        "expo/skills@expo-upgrade",
+        "expo/skills@expo-router",
+        "vercel-labs/agent-skills@vercel-react-native-skills",
+        "callstackincubator/agent-skills@react-native-best-practices"
+      ],
       "plugins": []
     }
   },

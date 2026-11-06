@@ -7,6 +7,15 @@
 <meta name="description" content="One command sets up Claude Code, Codex, Cursor or any coding agent with vetted skills, safety guards and playbooks for frontend, backend, AI, reverse engineering, research and go-to-market.">
 <meta property="og:title" content="Engineering OS">
 <meta property="og:description" content="The operating system for your coding agent. One command, every project.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://engineering-os-hazel.vercel.app">
+<meta property="og:image" content="https://engineering-os-hazel.vercel.app/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Engineering OS">
+<meta name="twitter:description" content="Vetted skills, safety guards and playbooks for Claude Code, Codex, Cursor and 70+ agents. One command.">
+<meta name="twitter:image" content="https://engineering-os-hazel.vercel.app/og.png">
 <meta name="theme-color" content="#161618">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23161618'/%3E%3Cpath d='M16 5l9 5.5v11L16 27l-9-5.5v-11z' fill='none' stroke='%23a88bfa' stroke-width='2.4' stroke-linejoin='round'/%3E%3Cpath d='M16 11l4.5 2.7v5.5L16 22l-4.5-2.8v-5.5z' fill='%23a88bfa'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -149,7 +158,7 @@
     display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--line-2);
     border-radius: 8px; padding: 6px 6px 6px 16px;
   }
-  .cmdline pre { margin: 0; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; font-size: 14px; line-height: 2.2; color: var(--text); }
+  .cmdline pre { margin: 0; flex: 1; min-width: 0; white-space: pre-wrap; overflow-wrap: normal; font-size: 13.5px; line-height: 1.7; padding: 6px 0; color: var(--text); }
   .cmdline .ps { color: var(--accent); user-select: none; }
   .copy {
     flex: none; cursor: pointer; border: 0; border-radius: 6px; padding: 9px 14px;
@@ -243,7 +252,7 @@
     .agentpick { width: 100%; border-top: 1px solid var(--line); padding: 7px 12px; margin: 0; }
     .agentpick select { flex: 1; }
     .cmdline { flex-direction: column; align-items: stretch; padding: 10px 10px 10px 12px; }
-    .cmdline pre { white-space: pre-wrap; word-break: break-all; line-height: 1.7; font-size: 13px; }
+    .cmdline pre { line-height: 1.7; font-size: 13px; }
     .status { justify-content: space-between; gap: 10px; }
     .status .opt { display: none; }
     .mfiles { display: block; margin-top: 18px; }
@@ -274,11 +283,11 @@
   <header class="hero">
     <div>
       <h1>The operating system for your coding agent<span class="cursor" aria-hidden="true"></span></h1>
-      <p>One command gives Claude Code, Codex, Cursor or any other agent the same vetted skills, safety guards and playbooks, in every project you open.</p>
+      <p>One command gives Claude Code, Codex, Cursor or any other agent the same vetted skills, safety guards and playbooks, in every project you open. It tells you when a new version ships.</p>
     </div>
     <div class="hero-meta" aria-label="What gets installed">
       <div><b>9</b> playbooks</div>
-      <div><b>50</b> vetted skills</div>
+      <div><b>115</b> vetted skills</div>
       <div><b>4</b> guards</div>
       <div><b>70+</b> agents</div>
     </div>
@@ -346,9 +355,9 @@
 
       <div class="status">
         <span class="live">ready</span>
-        <span class="opt">eos 0.2.1</span>
+        <span class="opt">eos 0.3.0 · auto-update notices</span>
         <span>9 playbooks</span>
-        <span class="opt">50 skills</span>
+        <span class="opt">115 skills</span>
         <span>4 guards</span>
         <span class="opt">MIT</span>
       </div>
@@ -365,9 +374,9 @@
       <p class="lead">Your agent loads them on its own when a task matches. Type them when you want to steer.</p>
     </div>
     <div class="grid3">
-      <div class="cell"><code>/eos:frontend</code><p>Build, polish and verify UI. Vercel React rules, shadcn, impeccable, a11y and perf audits.</p></div>
-      <div class="cell"><code>/eos:backend</code><p>APIs, Postgres, auth, payments, reliability. Nothing is done until it's been hit for real.</p></div>
-      <div class="cell"><code>/eos:ai</code><p>LLM features, agents, MCP servers, RAG, cost and latency, with <code>/eos:evals</code> test sets.</p></div>
+      <div class="cell"><code>/eos:frontend</code><p>Vercel React rules, shadcn, ui-ux-pro-max, impeccable, GSAP, Vitest, a11y and Core Web Vitals.</p></div>
+      <div class="cell"><code>/eos:backend</code><p>Prisma, Supabase, Neon, Upstash, auth and payments. Nothing is done until it's been hit for real.</p></div>
+      <div class="cell"><code>/eos:ai</code><p>Claude API, Vercel AI SDK, agents, MCP servers and RAG, with <code>/eos:evals</code> test sets.</p></div>
       <div class="cell"><code>/eos:reverse</code><p>Map unknown codebases, undocumented APIs, protocols and competitor products.</p></div>
       <div class="cell"><code>/eos:research</code><p>Decision-ready briefs with dated citations and a parallel researcher agent.</p></div>
       <div class="cell"><code>/eos:gtm</code><p>Positioning, pricing, launch and demo playbooks, wired to the top marketing skills.</p></div>
@@ -425,10 +434,10 @@
     "install.sh": { kind: "command", label: "Command" },
     "prompt.md": { kind: "prompt", label: "Prompt" },
     "CLAUDE.md": pb("Working rules", "Loaded in every project, for every agent.", ["Understand before changing; smallest correct change", "Evidence before claims: run it before saying done", "Branch, small commits, never force-push unasked"]),
-    "skills/map.md": pb("/eos:map <task>", "Tells the agent which skill or agent fits the task, then gets going.", ["Routes across 50+ installed skills and plugins", "Process first (plan, debug, verify), then domain", "Try: <code>/eos:map build a pricing page</code>"]),
+    "skills/map.md": pb("/eos:map <task>", "Tells the agent which skill or agent fits the task, then gets going.", ["Routes across 115 vetted skills and your plugins", "Process first (plan, debug, verify), then domain", "Try: <code>/eos:map build a pricing page</code>"]),
     "skills/add.md": pb("/eos:add <need>", "Finds the best community skill for a need, or writes a new one with skill-creator.", ["Vets by source, installs and redundancy", "Records it in the registry so every machine gets it", "Can also add a hook or a whole new domain"]),
-    "skills/frontend.md": pb("/eos:frontend", "Build, polish and verify web UI.", ["Vercel React and Next.js rules, shadcn, Tailwind design systems", "impeccable for critique and polish, plus a11y and perf audits", "Screenshots at mobile and desktop before calling it done"]),
-    "skills/backend.md": pb("/eos:backend", "APIs, databases, auth, payments and reliability.", ["Supabase Postgres rules, FastAPI, Better Auth, Stripe", "Authz on every resource, idempotent webhooks, safe migrations", "Hits the endpoint for real: happy path, bad input, wrong user"]),
+    "skills/frontend.md": pb("/eos:frontend", "Build, polish and verify web UI.", ["Vercel React and Next.js rules, shadcn, ui-ux-pro-max, GSAP", "impeccable for critique and polish, plus a11y and perf audits", "Screenshots at mobile and desktop before calling it done"]),
+    "skills/backend.md": pb("/eos:backend", "APIs, databases, auth, payments and reliability.", ["Prisma, Supabase, Neon, Upstash, FastAPI, Better Auth, Stripe", "Authz on every resource, idempotent webhooks, safe migrations", "Hits the endpoint for real: happy path, bad input, wrong user"]),
     "skills/ai.md": pb("/eos:ai", "LLM features, agents, MCP servers and RAG.", ["Evals first, prompts second, architecture third", "Claude API, Agent SDK, MCP builder, prompt patterns", "Bounded loops, structured output, cost per call"]),
     "skills/evals.md": pb("/eos:evals", "Test sets for prompts, agents and RAG.", ["20–50 real cases, code checks before LLM judges", "Compares versions and catches regressions in CI"]),
     "skills/reverse.md": pb("/eos:reverse", "Understand systems you didn't build.", ["Codebase archaeology into an ARCHITECTURE.md", "Undocumented APIs into an OpenAPI spec", "Protocols, binaries (authorized) and product teardowns"]),
@@ -500,7 +509,7 @@
         <p class="sub">Run it in your terminal. It installs the plugin, guards, working rules and the vetted skills. Run it again any time to update.</p>
         <div class="cmdline"><pre><span class="ps">$ </span><span id="cmdtext"></span></pre><button class="copy" type="button" id="copy-cmd">Copy</button></div>
         <p class="hint" id="cmdhint"></p>`;
-      $("cmdtext").textContent = command();
+      $("cmdtext").textContent = command().replace(/https:\/\/\S+/, (u) => u.replace(/-/g, "\u2011"));
       $("cmdhint").innerHTML = agentSel.value === "claude-code"
         ? "Then open a new Claude Code session and type <code>/eos:map</code>."
         : `Then restart ${agentSel.options[agentSel.selectedIndex].text}. It gets the skills and working rules; guards run in Claude Code.`;
@@ -546,9 +555,9 @@
   // ---------- terminal demo: one orchestrated sequence ----------
   const SCRIPT = [
     ["in", "/eos:map build a pricing page with stripe checkout"],
-    ["dim", "  routing across 59 skills…"],
+    ["dim", "  routing across 115 skills…"],
     ["ok", "  <b>✓</b> <em>eos:frontend</em>         layout, polish, verify at 390 / 1440"],
-    ["ok", "  <b>✓</b> <em>eos:backend</em>          checkout session, idempotent webhooks"],
+    ["ok", "  <b>✓</b> <em>eos:backend</em>          prisma, checkout session, idempotent webhooks"],
     ["ok", "  <b>✓</b> <em>stripe-best-practices</em>  <em>impeccable</em>  <em>cro</em>"],
     ["in", "git push --force origin main"],
     ["warn", "  ⚠ bash-guard: force-push rewrites remote history. Confirm? [y/N]"],
@@ -565,7 +574,16 @@
       if (id !== run) return;
       if (kind === "in" && !reduce) {
         const d = line("in", "");
-        for (let i = 1; i <= text.length; i++) { if (id !== run) return; d.innerHTML = esc(text.slice(0, i)) + '<span class="caret"></span>'; await sleep(26); }
+        const ms = text.length * 26, t0 = performance.now();
+        await new Promise((done) => {
+          const tick = (now) => {
+            if (id !== run) return done();
+            const n = Math.min(text.length, Math.ceil(((now - t0) / ms) * text.length));
+            d.innerHTML = esc(text.slice(0, n)) + '<span class="caret"></span>';
+            n >= text.length ? done() : requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
         d.innerHTML = esc(text); await sleep(380);
       } else {
         line(kind, kind === "in" ? esc(text) : text);

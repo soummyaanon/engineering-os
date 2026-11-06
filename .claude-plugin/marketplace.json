@@ -9,7 +9,7 @@
       "name": "eos",
       "source": "./plugins/eos",
       "description": "Engineering OS: one plugin with playbooks for frontend, backend, AI, evals, reverse engineering, GTM and research; a skill map; safety hooks; and /eos:add to grow the harness.",
-      "version": "0.2.1"
+      "version": "0.3.0"
     }
   ]
 }

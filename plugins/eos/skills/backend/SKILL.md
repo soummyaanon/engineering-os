@@ -17,14 +17,23 @@ Backend bugs are expensive because they corrupt data, leak data, or fail silentl
 
 | Situation | Skill |
 |---|---|
-| Postgres schema, indexes, queries, RLS | `postgres-best-practices` |
-| Auth (sessions, OAuth, 2FA, orgs/teams, email+password) | `better-auth-best-practices`, `better-auth-security-best-practices`, `two-factor-authentication-best-practices`, `organization-best-practices`, `email-and-password-best-practices` |
+| Postgres schema, indexes, queries, RLS, migrations | `supabase-postgres-best-practices` (any Postgres, not only Supabase) |
+| Prisma (schema, client queries, migrations, CLI) | `prisma-orm-setup`, `prisma-client-api`, `prisma-cli` |
+| Supabase (auth, storage, edge functions, realtime, RLS) | `supabase` + `supabase-postgres-best-practices` |
+| Serverless Postgres / branching | `neon-postgres` |
+| Caching, queues, rate limiting | `upstash-redis-js`, `upstash-ratelimit-js` |
+| API and interface design | `api-and-interface-design` |
+| FastAPI | `fastapi` |
+| Auth (sessions, OAuth, 2FA, orgs/teams, email+password) | `better-auth-best-practices`, `better-auth-security-best-practices`, `create-auth`, `two-factor-authentication-best-practices`, `organization-best-practices`, `email-and-password-best-practices` |
 | Payments, subscriptions, webhooks | `stripe:stripe-best-practices` |
+| Hardening, OWASP, dependency risk | `security-and-hardening`, then `security-review` on the diff |
+| Logging, metrics, tracing, alerts | `observability-and-instrumentation` |
+| Containers | `multi-stage-dockerfile` |
+| Convex, MongoDB, Redis, Cloudflare Workers, Hono, Clerk, Sentry, AWS, GitHub Actions | `eos enable backend` installs the official skills for these |
 | Building an MCP server | `mcp-builder` |
 | System/architecture decisions, ADRs | `engineering:system-design`, `engineering:architecture` |
 | Production incident | `engineering:incident-response`, then `superpowers:systematic-debugging` |
 | Deploy readiness | `engineering:deploy-checklist` |
-| Security review of a diff | `security-review` |
 
 ## 3. API design
 

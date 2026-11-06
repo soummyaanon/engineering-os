@@ -9,7 +9,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _eos import read_input  # noqa: E402
+from _eos import eos_home, read_input, update_notice  # noqa: E402
 
 JS_SIGNALS = {
     "next": ("Next.js", "frontend"), "react": ("React", "frontend"), "vue": ("Vue", "frontend"),
@@ -22,7 +22,7 @@ JS_SIGNALS = {
     "better-auth": ("Better Auth", "backend"), "stripe": ("Stripe", "backend"), "trpc": ("tRPC", "backend"),
     "@anthropic-ai/sdk": ("Anthropic SDK", "ai"), "@anthropic-ai/claude-agent-sdk": ("Claude Agent SDK", "ai"),
     "openai": ("OpenAI SDK", "ai"), "ai": ("Vercel AI SDK", "ai"), "langchain": ("LangChain", "ai"),
-    "@langchain/core": ("LangChain", "ai"), "@modelcontextprotocol/sdk": ("MCP", "ai"), "@mastra/core": ("Mastra", "ai"),
+    "@langchain/core": ("LangChain", "ai"), "@modelcontextprotocol/sdk": ("MCP", "ai"), "@mastra/core": ("Mastra", "ai"), "convex": ("Convex", "backend"),
     "playwright": ("Playwright", "frontend"), "@playwright/test": ("Playwright", "frontend"),
 }
 PY_SIGNALS = {
@@ -88,6 +88,25 @@ def detect(root):
     return found, domains
 
 
+def pack_nudge(found):
+    """If the stack matches a domain whose optional (stack-specific) skills aren't installed, suggest `eos enable`."""
+    home = eos_home()
+    if not home or not found:
+        return ""
+    try:
+        reg = json.load(open(os.path.join(home, "registry", "community.json")))
+    except Exception:
+        return ""
+    skills_dir = os.path.join(os.environ.get("CLAUDE_CONFIG_DIR") or os.path.expanduser("~/.claude"), "skills")
+    for dom, spec in reg.get("domains", {}).items():
+        hits = [s for s in spec.get("signals", []) if s in found]
+        missing = [e.split("@", 1)[1] for e in spec.get("optional", []) if not os.path.isdir(os.path.join(skills_dir, e.split("@", 1)[1]))]
+        if hits and missing:
+            return (f"This project uses {', '.join(hits)}; official skills for it are available but not installed. "
+                    f"Suggest the user run `eos enable {dom}` once.")
+    return ""
+
+
 def main():
     data = read_input()
     root = os.environ.get("CLAUDE_PROJECT_DIR") or data.get("cwd") or os.getcwd()
@@ -113,9 +132,17 @@ def main():
     if not rules_on:
         lines.append("Engineering OS setup is incomplete on this machine (no global rules / community skills): "
                      "suggest the user run /eos:setup once.")
+    nudge = pack_nudge(found)
+    if nudge:
+        lines.append(nudge)
     if is_git and not has_claude_md:
         lines.append("This repo has no CLAUDE.md; offer to create one (/init) if the user will work here repeatedly.")
-    print(" ".join(lines))
+    out = {"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": " ".join(lines)}}
+    upd = update_notice()
+    if upd:
+        out["systemMessage"] = upd[0]
+        out["hookSpecificOutput"]["additionalContext"] += " " + upd[1]
+    print(json.dumps(out))
     sys.exit(0)
 
 

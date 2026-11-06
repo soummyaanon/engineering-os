@@ -2,6 +2,7 @@
 """eos — Engineering OS manager.
 
   eos install [--all] [--domain D] [--skip-community] [--no-link]   link plugins + rules, install registry skills
+  eos update [--all] [--agent A]                       pull the latest version and re-install
   eos status                                           what's installed / missing
   eos add <owner/repo@skill> --domain D [--optional]   add a community skill to the registry and install it
   eos enable <domain>                                  install a domain's optional skills too
@@ -11,6 +12,7 @@
   eos sync                                             regenerate marketplace.json and relink plugins
   eos validate                                         validate plugins, marketplace, and skill frontmatter
   eos audit                                            scan installed community skills for risky content
+  eos verify                                           check every registry skill still exists upstream
   eos doctor                                           check prerequisites and harness health
 
 Env: EOS_HOME (default: repo containing this script), CLAUDE_HOME (default ~/.claude)
@@ -256,6 +258,30 @@ def cmd_install(a):
         install_plugins(reg, domains)
     head("Done. Start a new Claude Code session (not /clear) to load everything. Try /eos:map")
 
+def cmd_update(a):
+    """Pull the latest Engineering OS and re-install (keeps the same scope: core, or --all / --agent)."""
+    head("Updating Engineering OS")
+    if not os.path.isdir(os.path.join(EOS_HOME, ".git")):
+        err(f"{EOS_HOME} is not a git checkout. Marketplace installs update with: "
+            "claude plugin marketplace update engineering-os && claude plugin update eos@engineering-os")
+        sys.exit(1)
+    before = json.load(open(os.path.join(PLUGINS_DIR, "eos", ".claude-plugin", "plugin.json"))).get("version")
+    r = run(["git", "-C", EOS_HOME, "pull", "--ff-only", "-q"], quiet=True)
+    if r is None or r.returncode != 0:
+        err("git pull failed (local changes?). Resolve in " + EOS_HOME + " and re-run.")
+        sys.exit(1)
+    after = json.load(open(os.path.join(PLUGINS_DIR, "eos", ".claude-plugin", "plugin.json"))).get("version")
+    ok(f"{before} → {after}" if before != after else f"already on the latest ({after}); re-syncing skills")
+    try:
+        os.remove(os.path.join(CLAUDE_HOME, "eos-update.json"))
+    except OSError:
+        pass
+    a.skip_community = False
+    a.no_link = False
+    a.domain = None
+    cmd_install(a)
+
+
 def cmd_enable(a):
     reg = load_registry()
     if a.domain not in reg["domains"]:
@@ -462,6 +488,31 @@ def audit_paths(paths):
         print("  Review flagged lines — many are legitimate (e.g. docs that *warn* about curl|sh).")
     return flagged
 
+def cmd_verify(_a):
+    """Check every registry entry still exists upstream (skills get renamed/merged). Exit 1 on drift."""
+    reg = load_registry()
+    by_repo = defaultdict(set)
+    for _, e in entries(reg, include_optional=True):
+        repo, skill = parse_entry(e)
+        by_repo[repo].add(skill)
+    head(f"Verifying {sum(len(v) for v in by_repo.values())} skills across {len(by_repo)} repos")
+    ansi = re.compile(r"\x1b\[[0-9;?]*[a-zA-Z]")
+    missing = []
+    for repo, skills in sorted(by_repo.items()):
+        r = run(["npx", "-y", "skills", "add", repo, "-l"], quiet=True, timeout=180)
+        text = ansi.sub("", (r.stdout + r.stderr) if r else "")
+        found = set(re.findall(r"^\W*\s{3,}([a-z0-9][a-z0-9._-]+)\s*$", text, re.M))
+        gone = sorted(s for s in skills if s not in found)
+        if gone:
+            missing += [f"{repo}@{g}" for g in gone]
+            err(f"{repo}: missing {', '.join(gone)}")
+        else:
+            ok(f"{repo} ({len(skills)})")
+    if missing:
+        print("\nUpstream renamed or removed these. Find the new name with: npx skills add <repo> -l")
+        sys.exit(1)
+
+
 def cmd_audit(_a):
     reg = load_registry()
     names = [parse_entry(e)[1] for _, e in entries(reg, include_optional=True)]
@@ -486,6 +537,7 @@ def main():
     sp = ap.add_subparsers(dest="cmd", required=True)
     p = sp.add_parser("install"); p.add_argument("--all", action="store_true"); p.add_argument("--domain", action="append"); p.add_argument("--skip-community", action="store_true"); p.add_argument("--no-link", action="store_true", help="for marketplace installs: skip symlinking plugins"); p.add_argument("--agent", help="install for another coding agent (codex, cursor, gemini-cli, github-copilot, windsurf, opencode, …)"); p.set_defaults(f=cmd_install)
     sp.add_parser("status").set_defaults(f=cmd_status)
+    p = sp.add_parser("update"); p.add_argument("--all", action="store_true"); p.add_argument("--agent"); p.set_defaults(f=cmd_update)
     p = sp.add_parser("add"); p.add_argument("entry"); p.add_argument("--domain", required=True); p.add_argument("--optional", action="store_true"); p.set_defaults(f=cmd_add)
     p = sp.add_parser("enable"); p.add_argument("domain"); p.set_defaults(f=cmd_enable)
     p = sp.add_parser("remove"); p.add_argument("skill"); p.set_defaults(f=cmd_remove)
@@ -494,6 +546,7 @@ def main():
     sp.add_parser("sync").set_defaults(f=cmd_sync)
     sp.add_parser("validate").set_defaults(f=cmd_validate)
     sp.add_parser("audit").set_defaults(f=cmd_audit)
+    sp.add_parser("verify").set_defaults(f=cmd_verify)
     sp.add_parser("doctor").set_defaults(f=cmd_doctor)
     a = ap.parse_args()
     a.f(a)
