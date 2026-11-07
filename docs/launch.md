@@ -4,7 +4,34 @@ Ready-to-post copy. Attach `site/og.png` (or a 20–30s screen recording of the 
 
 Best order: X thread → Show HN the next weekday morning (US Eastern ~8–10am) → Reddit the same day → LinkedIn → Product Hunt once you have a few stars and replies to point to. Reply to every comment in the first two hours.
 
-## X / Twitter thread
+## Lead with the score (0.5.0)
+
+The hook is no longer "162 skills". It's a grade people want to check and a receipt people want to post.
+
+**X post 1 (attach your `eos score --card` PNG, ideally a before/after pair):**
+I built Lighthouse for coding agents.
+
+One command grades your Claude Code setup: guardrails, rules, skills, feedback loops. Mine was an F before I fixed it.
+
+Read-only, nothing leaves your machine:
+`curl -fsSL engineering-os-hazel.vercel.app/score | python3 -`
+
+What did you get? 👇
+
+**X post 2, a week later (attach `eos receipts --card`):**
+This week my coding agent tried to force-push to main twice and write a live Stripe key into source.
+
+It didn't get to. Receipts 👇
+
+**Show HN title:** Show HN: Lighthouse for coding agents – grade your Claude Code setup in 5 seconds
+
+**Show HN first paragraph:** `eos score` reads ~/.claude and the current repo and grades the setup out of 100: are destructive commands guarded, can secrets land in source, do your rules demand verification, do your skills match your stack, are there too many skills for the agent to pick well. It credits any guard you already have, not just mine, and makes no network calls. If you want the fixes, Engineering OS installs them in one command.
+
+**Before posting:** run `eos score --card` on a fresh machine (expect F) and after installing (expect A) and post both images together.
+
+---
+
+## X / Twitter thread (original, skills-first)
 
 1/
 I set up my coding agent the way a senior engineer would set up a new teammate: the right playbooks, the best skills from the people who build the tools, and guardrails for the expensive mistakes.

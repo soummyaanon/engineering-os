@@ -47,6 +47,7 @@ def main():
                 "ask",
                 f"Engineering OS secret guard: this writes what looks like {what} into {base or 'a file'}. "
                 "Secrets belong in .env (gitignored) or a secret manager, read via env vars.",
+                {"guard": "secret", "why": what, "file": base, "project": os.path.basename(data.get("cwd") or "")},
             )
     sys.exit(0)
 

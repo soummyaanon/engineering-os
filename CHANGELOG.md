@@ -2,6 +2,14 @@
 
 Update any time with `eos update` (or re-run the install command). Claude Code tells you when a new version is out.
 
+## 0.5.0 — 2026-11-07
+
+**New: `eos score`, Lighthouse for coding agents.** Grades a Claude Code setup out of 100 across guardrails, working rules, skills and feedback loops, then lists the biggest wins. It credits any guard hook, not only Engineering OS's. Read-only and local; runs without installing anything: `curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -`. `--card` writes a shareable 1200×630 card (PNG when Chrome or rsvg-convert is available), `--badge` prints a README badge, `--json` for scripts.
+
+**New: `eos receipts`.** The bash and secret guards now keep a local log of what they blocked or held for approval. Commands are redacted before they're written, and secret receipts store only the key type and file name. `eos receipts` shows the week; `--card` and `--share` turn it into a post. Turn off with `EOS_RECEIPTS=off`.
+
+CI now checks that receipts never contain secrets and that `eos score` grades an empty setup F and a guarded one with full guard credit.
+
 ## 0.4.0 — 2026-11-07
 
 **New: `/eos:deploy`** — picks the platform (or keeps yours), runs a pre-deploy checklist, sets up CI/CD, and verifies after shipping. Official skills for **Vercel** (deploy), **AWS** (deployment, CDK) and **Azure** (prepare, deploy, validate), plus GitHub Actions templates. On demand (`eos enable deploy`): Cloudflare Workers, Firebase Hosting, Netlify, Railway, Terraform, AWS serverless/containers/IAM/Amplify, Azure diagnostics/AKS/App Service, Vercel optimize.
