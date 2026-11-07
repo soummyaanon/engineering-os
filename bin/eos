@@ -14,6 +14,8 @@
   eos audit                                            scan installed community skills for risky content
   eos verify                                           check every registry skill still exists upstream
   eos doctor                                           check prerequisites and harness health
+  eos score [--card] [--badge] [--json]                grade this machine's agent setup (read-only, local)
+  eos receipts [--days N] [--card] [--share]           what the guards stopped, ready to share
 
 Env: EOS_HOME (default: repo containing this script), CLAUDE_HOME (default ~/.claude)
 """
@@ -552,6 +554,12 @@ def cmd_doctor(_a):
     cmd_status(_a)
 
 
+def cmd_score(a):
+    sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
+    import eos_score
+    (eos_score.receipts_main if a.cmd == "receipts" else eos_score.main)(a.rest)
+
+
 def main():
     ap = argparse.ArgumentParser(prog="eos", description="Engineering OS manager", formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -568,6 +576,10 @@ def main():
     sp.add_parser("audit").set_defaults(f=cmd_audit)
     sp.add_parser("verify").set_defaults(f=cmd_verify)
     sp.add_parser("doctor").set_defaults(f=cmd_doctor)
+    sp.add_parser("score", help="grade this machine's agent setup (eos score -h)")
+    sp.add_parser("receipts", help="what the guards stopped (eos receipts -h)")
+    if sys.argv[1:2] in (["score"], ["receipts"]):  # these own their flags
+        return cmd_score(argparse.Namespace(cmd=sys.argv[1], rest=sys.argv[2:]))
     a = ap.parse_args()
     a.f(a)
 
