@@ -1,6 +1,7 @@
 """Shared helpers for Engineering OS hooks. Stdlib only, Python 3.8+."""
 import json
 import os
+import re
 import sys
 
 
@@ -37,8 +38,46 @@ def eos_home():
     return default if os.path.isdir(default) else None
 
 
-def pretool_decision(decision, reason):
-    """decision: allow | deny | ask"""
+SECRETISH = re.compile(
+    r"(sk-ant-|sk-|gh[pousr]_|xox[baprs]-|(sk|rk)_live_|AKIA|AIza|eyJ)[A-Za-z0-9_\-.]{8,}"
+    r"|(?i:(token|key|secret|password|passwd|authorization|bearer)\s*[:=]?\s*)\S{8,}"
+    r"|://[^:\s/]+:[^@\s]+@"
+    r"|[A-Za-z0-9+/_\-]{32,}")
+
+
+def redact(text, limit=140):
+    """Strip anything token-shaped before a command is written to the local receipts log."""
+    text = SECRETISH.sub("[redacted]", " ".join(str(text).split()))
+    return text if len(text) <= limit else text[:limit - 1] + "…"
+
+
+def receipts_path():
+    return os.path.join(_claude_home(), "eos-receipts.jsonl")
+
+
+def log_receipt(entry):
+    """Append one line to ~/.claude/eos-receipts.jsonl (local only; `eos receipts` reads it). Never raises."""
+    if os.environ.get("EOS_RECEIPTS") == "off":
+        return
+    try:
+        import time
+        path = receipts_path()
+        if os.path.exists(path) and os.path.getsize(path) > 1_000_000:  # keep the newest half
+            with open(path) as f:
+                lines = f.readlines()
+            with open(path, "w") as f:
+                f.writelines(lines[len(lines) // 2:])
+        entry = {"ts": round(time.time()), **entry}
+        with open(path, "a") as f:
+            f.write(json.dumps(entry) + "\n")
+    except Exception:
+        pass
+
+
+def pretool_decision(decision, reason, receipt=None):
+    """decision: allow | deny | ask. `receipt` (optional dict) is logged locally for `eos receipts`."""
+    if receipt is not None:
+        log_receipt({"decision": decision, **receipt})
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",

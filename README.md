@@ -24,6 +24,25 @@ curl -fsSL https://engineering-os-hazel.vercel.app/install | bash
 
 Then open a new Claude Code session and type `/eos:map <what you're building>`.
 
+### First, grade the setup you have now
+
+```bash
+curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -
+```
+
+`eos score` is Lighthouse for coding agents. It grades guardrails, working rules, skills and feedback loops out of 100, lists the biggest wins, and credits any guard you already have, not just ours. Read-only and local: it reads `~/.claude` and the current repo and sends nothing anywhere. No install needed.
+
+```
+  A+   97/100
+
+  Guardrails      ████████████████████ 100%
+  Working rules   ████████████████████ 100%
+  Skills          ██████████████████░░  90%
+  Feedback loops  ████████████████████ 100%
+```
+
+`eos score --card` writes a 1200×630 card to post. `eos score --badge` prints a README badge with your grade.
+
 <details>
 <summary><b>Codex, Cursor, Gemini CLI, Copilot, Windsurf, OpenCode…</b></summary>
 
@@ -42,6 +61,8 @@ Or paste [this prompt](https://engineering-os-hazel.vercel.app/prompt) into any 
 |---|---|
 | 🧭 **10 playbooks** | `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:deploy` `/eos:reverse` `/eos:research` `/eos:gtm`, plus `/eos:map` (which skill for this task?) and `/eos:add` (grow the harness). Each one knows the best specialist skills and the bar for "done". |
 | 📦 **162 vetted skills** | 84 installed by default, 78 more on demand with `eos enable <area>`. Official vendor or top author, ≥1K installs, not redundant. |
+| 📊 **`eos score`** | Grades any Claude Code setup (A+ to F) with the fixes that matter most. Shareable card and README badge. |
+| 🧾 **`eos receipts`** | Every risky action the guards caught, with secrets redacted: *"This week my agent tried 4 risky things, all caught before they ran."* `--card` / `--share` to post it. |
 | 🛡️ **Guards that run on every command** | Blocks `rm -rf ~`-class disasters. Asks before force-push, pushing to main, `reset --hard`, `DROP TABLE`, `curl \| sh`, publish and prod deploys. Stops real API keys landing in source. Works in auto mode. |
 | 🔎 **Stack-aware sessions** | Detects Next.js, Prisma, Supabase, FastAPI, the Anthropic SDK and more, and points the agent at the right playbook. Suggests the matching skill pack when your stack has one. |
 | 🔔 **Update notices** | Claude Code tells you when a new version ships. `eos update` pulls it. |
@@ -72,6 +93,7 @@ eos add owner/repo@skill --domain frontend   # adopt a community skill (recorded
 eos new-skill release-notes                  # your own skill → live next session as /eos:release-notes
 eos new-domain mobile -d "iOS/Android"       # a new area with its own playbook
 eos enable backend                           # turn on an area's on-demand pack
+eos score · eos receipts                     # grade the setup, see what the guards caught
 eos update · eos status · eos verify · eos validate · eos audit · eos doctor
 ```
 
@@ -81,8 +103,9 @@ Or just ask your agent: `/eos:add stripe webhooks`. It searches the open skills 
 
 | Hook | Does | Off switch |
 |---|---|---|
-| bash-guard | Blocks catastrophic commands; asks before risky ones; lets `rm -rf node_modules` through | `EOS_GUARD=off` or `{"guard":"off"}` |
-| secret-guard | Asks before real-looking keys / private keys / DB passwords go into source (`.env` allowed) | `{"secret_guard":"off"}` |
+| bash-guard | Blocks catastrophic commands; asks before risky ones; lets `rm -rf node_modules` through. Logs a redacted receipt. | `EOS_GUARD=off` or `{"guard":"off"}` |
+| secret-guard | Asks before real-looking keys / private keys / DB passwords go into source (`.env` allowed). Receipts record the key type and file name, never the key. | `{"secret_guard":"off"}` |
+| receipts | Local log at `~/.claude/eos-receipts.jsonl` that `eos receipts` reads. Never uploaded. | `EOS_RECEIPTS=off` |
 | session-brief | Stack detection, playbook routing, skill-pack and update notices | `EOS_UPDATE_CHECK=off` (updates only) |
 | autoformat | Formats edits with the project's own Prettier / Biome / Ruff / gofmt / rustfmt | opt-in `{"autoformat":true}` |
 | notify | macOS notification when the agent needs you | `EOS_NOTIFY=off` |
@@ -95,6 +118,8 @@ Per-project switches go in `<project>/.claude/eos.json`.
 
 **Is it safe to pipe to bash?** Read it first: [`install.sh`](install.sh) (under 80 lines). It clones this repo to `~/engineering-os`, links one plugin, adds one import line to `~/.claude/CLAUDE.md`, and installs skills with the open `skills` CLI, which runs its own security scan. Community skills are also audited by `eos audit`.
 
+**Does `eos score` upload my config?** No. It reads files and prints a report; it makes no network calls. The card and badge contain only your grade and category percentages.
+
 **How do I uninstall?** `rm ~/.claude/skills/eos`, delete the import line from `~/.claude/CLAUDE.md`, and remove skills you don't want with `eos remove <skill>`.
 
 **Can I use it without Claude Code?** Yes — any agent the open skills format supports gets the skills and rules.
@@ -106,6 +131,7 @@ install.sh                  one-command installer
 CLAUDE.md                   global working rules
 registry/community.json     the curated skill list (core + on-demand, by area)
 bin/eos                     CLI
+bin/eos_score.py            eos score + eos receipts (standalone, stdlib only)
 plugins/eos/                the plugin → /eos:*
   skills/                   map, add, frontend, backend, ai, evals, deploy, reverse, gtm, research
   hooks/                    guards, session briefing, update check, autoformat, notify

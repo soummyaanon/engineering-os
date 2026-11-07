@@ -355,7 +355,7 @@
 
       <div class="status">
         <span class="live">ready</span>
-        <span class="opt">eos 0.4.0 · auto-update notices</span>
+        <span class="opt">eos 0.5.0 · auto-update notices</span>
         <span>10 playbooks</span>
         <span class="opt">162 skills</span>
         <span>4 guards</span>
@@ -367,6 +367,20 @@
   <div class="mfiles" aria-label="Playbooks">
     <div class="chips" id="mfiles"></div>
   </div>
+
+  <section class="band" id="score" aria-labelledby="h-score">
+    <div>
+      <h2 id="h-score">What grade is your agent setup?</h2>
+      <p class="lead">Lighthouse for coding agents. Grades guardrails, working rules, skills and feedback loops, then tells you the biggest wins. Read-only, nothing leaves your machine, works without installing anything.</p>
+    </div>
+    <div>
+      <div class="cmdline"><pre><span class="ps">$ </span>curl -fsSL engineering-os-hazel.vercel.app/score | python3 -</pre><button class="copy" type="button" id="copy-score">Copy</button></div>
+<pre class="codeblock" style="margin-top:14px"><span class="c"># after installing</span>
+<span class="p">$</span> eos score --card     <span class="c"># shareable 1200×630 card</span>
+<span class="p">$</span> eos score --badge    <span class="c"># README badge with your grade</span>
+<span class="p">$</span> eos receipts         <span class="c"># what the guards stopped this week</span></pre>
+    </div>
+  </section>
 
   <section class="band" aria-labelledby="h-play">
     <div>
@@ -555,6 +569,7 @@
     .catch(() => { promptText = "Couldn't load the prompt. Open /prompt to copy it."; if (active === "prompt.md") renderDoc(); });
 
   setActive(active);
+  wireCopy(document.getElementById("copy-score"), () => "curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -");
 
   // ---------- terminal demo: one orchestrated sequence ----------
   const SCRIPT = [
