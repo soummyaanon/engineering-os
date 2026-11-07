@@ -1,0 +1,36 @@
+name: Guard miss or false alarm
+description: The guards let something dangerous through, or stopped something harmless
+labels: [guards]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks: this is how the guards get better. Every confirmed report becomes a permanent test case in `eos redteam`.
+        **Found a way to make a hook run attacker-controlled code, or to leak secrets?** That's a security issue: use [private reporting](https://github.com/soummyaanon/engineering-os/security/advisories/new) instead.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Which is it?
+      options:
+        - Missed: a dangerous command or secret got through
+        - False alarm: a harmless command or edit was blocked or held
+    validations:
+      required: true
+  - type: dropdown
+    id: guard
+    attributes:
+      label: Guard
+      options: [bash guard (commands), secret guard (file writes), not sure]
+  - type: textarea
+    id: input
+    attributes:
+      label: The exact command or file content
+      description: Replace any real secret with a fake one of the same shape.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it should be the other way
+      description: For a miss, what damage it does. For a false alarm, how often you hit it in real work.

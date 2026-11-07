@@ -2,6 +2,20 @@
 
 Update any time with `eos update` (or re-run the install command). Claude Code tells you when a new version is out.
 
+## 0.6.0 — 2026-11-08
+
+**New: `eos redteam`.** Fires 51 attacks (wiping home, destroying data, rewriting git history, running remote scripts, leaking secrets off the machine, prod changes, keys written into source) and 35 everyday look-alikes at your guards. The calls are fake: your PreToolUse hooks and Bash permission rules judge them, and nothing is executed. Works on any setup, without installing anything: `curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 - redteam`. `--all` lists every case, `--card` makes a shareable image, `--json` for CI.
+
+**`eos score` now tests guards instead of checking that they exist.** Guardrail points are the share of redteam attacks stopped, scaled down by false alarms, since a guard that asks about everything gets clicked through. `--no-redteam` restores the old presence check.
+
+**Guard fixes found by redteam.** The 0.5.0 bash guard stopped 38/51 with 4 false alarms. Now it stops 51/51 with none:
+- `rm -rf $HOME`, `rm -rf ~/`, `rm -r -f ~` and `find ~ -delete` are blocked. `$HOME` used to be matched case-sensitively against lowercased text, so it never matched.
+- `git branch -D` and `chmod -R 777` now ask. Their uppercase flags could never match before.
+- New: sending `.env`, SSH keys, cloud credentials or the whole environment to the network asks first. So do `bash <(curl …)`, `eval "$(curl …)"` and recursive cloud-storage deletes.
+- Quoted text in `git commit -m`, `grep`, `echo` and similar no longer triggers prompts, unless it's piped into a shell or contains `$(…)`.
+
+**Community files.** CONTRIBUTING, SECURITY (private vulnerability reporting), Code of Conduct, issue templates (bug, guard miss / false alarm, skill suggestion) and a PR template.
+
 ## 0.5.0 — 2026-11-07
 
 **New: `eos score`, Lighthouse for coding agents.** Grades a Claude Code setup out of 100 across guardrails, working rules, skills and feedback loops, then lists the biggest wins. It credits any guard hook, not only Engineering OS's. Read-only and local; runs without installing anything: `curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -`. `--card` writes a shareable 1200×630 card (PNG when Chrome or rsvg-convert is available), `--badge` prints a README badge, `--json` for scripts.

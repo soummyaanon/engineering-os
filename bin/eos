@@ -16,6 +16,7 @@
   eos doctor                                           check prerequisites and harness health
   eos score [--card] [--badge] [--json]                grade this machine's agent setup (read-only, local)
   eos receipts [--days N] [--card] [--share]           what the guards stopped, ready to share
+  eos redteam [--all] [--card] [--json]                fire 51 fake attacks at your guards; see what gets through
 
 Env: EOS_HOME (default: repo containing this script), CLAUDE_HOME (default ~/.claude)
 """
@@ -557,7 +558,7 @@ def cmd_doctor(_a):
 def cmd_score(a):
     sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
     import eos_score
-    (eos_score.receipts_main if a.cmd == "receipts" else eos_score.main)(a.rest)
+    {"receipts": eos_score.receipts_main, "redteam": eos_score.redteam_main}.get(a.cmd, eos_score.main)(a.rest)
 
 
 def main():
@@ -578,7 +579,8 @@ def main():
     sp.add_parser("doctor").set_defaults(f=cmd_doctor)
     sp.add_parser("score", help="grade this machine's agent setup (eos score -h)")
     sp.add_parser("receipts", help="what the guards stopped (eos receipts -h)")
-    if sys.argv[1:2] in (["score"], ["receipts"]):  # these own their flags
+    sp.add_parser("redteam", help="fire synthetic attacks at the guards (eos redteam -h)")
+    if sys.argv[1:2] in (["score"], ["receipts"], ["redteam"]):  # these own their flags
         return cmd_score(argparse.Namespace(cmd=sys.argv[1], rest=sys.argv[2:]))
     a = ap.parse_args()
     a.f(a)
