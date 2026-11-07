@@ -1,0 +1,43 @@
+name: Skill suggestion
+description: Propose a skill or plugin for the registry
+labels: [registry]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The vetting bar: an official vendor or a well-known author, at least 1K installs, and no install-time scripts.
+  - type: input
+    id: entry
+    attributes:
+      label: Skill
+      description: As `owner/repo@skill` (skills.sh / `npx skills`), or `plugin@marketplace`
+      placeholder: vercel-labs/agent-skills@vercel-react-best-practices
+    validations:
+      required: true
+  - type: dropdown
+    id: domain
+    attributes:
+      label: Domain
+      options: [core, frontend, backend, ai, deploy, mobile, reverse-engineering, gtm, research, new domain]
+    validations:
+      required: true
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Core or optional?
+      description: Core skills load for everyone in every session, so the bar is higher.
+      options: [optional (installed with `eos enable <domain>`), core (installed by default)]
+  - type: input
+    id: installs
+    attributes:
+      label: Install count and source
+      placeholder: 12K installs on skills.sh · https://github.com/…
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it beats what's there
+      description: What it does better than the skills already in this domain, ideally from using it.
+    validations:
+      required: true

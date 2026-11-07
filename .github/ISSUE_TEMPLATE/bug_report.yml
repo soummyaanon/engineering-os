@@ -1,0 +1,41 @@
+name: Bug report
+description: Something in eos, the hooks, the installer or the site doesn't work
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, and what happened instead. Paste the exact error.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. eos install
+        2. …
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `eos doctor`
+      description: Remove anything private before pasting.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: Engineering OS version
+      description: "`cat ~/engineering-os/plugins/eos/.claude-plugin/plugin.json | grep version`"
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Coding agent
+      options: [Claude Code, Codex, Cursor, Gemini CLI, Other]
+  - type: input
+    id: os
+    attributes:
+      label: OS
+      placeholder: macOS 15, Ubuntu 24.04, Windows 11 + WSL…
