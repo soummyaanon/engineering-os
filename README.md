@@ -30,7 +30,7 @@ Then open a new Claude Code session and type `/eos:map <what you're building>`.
 curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -
 ```
 
-`eos score` is Lighthouse for coding agents. It grades guardrails, working rules, skills and feedback loops out of 100, lists the biggest wins, and credits any guard you already have, not just ours. Read-only and local: it reads `~/.claude` and the current repo and sends nothing anywhere. No install needed.
+`eos score` is Lighthouse for coding agents. It grades guardrails, working rules, skills and feedback loops out of 100, lists the biggest wins, and credits any guard you already have, not just ours, by attacking it (below). Read-only and local: it reads `~/.claude` and the current repo and sends nothing anywhere. No install needed.
 
 ```
   A+   97/100
@@ -42,6 +42,26 @@ curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -
 ```
 
 `eos score --card` writes a 1200×630 card to post. `eos score --badge` prints a README badge with your grade.
+
+### Then attack it
+
+```bash
+curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 - redteam
+```
+
+`eos redteam` fires 51 attacks at your agent's guards: `rm -rf ~` in six disguises, `curl | sh`, force-pushes, `DROP TABLE`, `.env` and SSH keys sent to a webhook, live API keys written into source. It also fires 35 everyday commands that share the scary words (`rm -rf node_modules`, `grep "DROP TABLE"`, `git commit -m "fix rm -rf bug"`). The calls are fake: your hooks and permission rules judge each one exactly as Claude Code would hand it to them, and nothing is ever executed. Your score's guardrail points come from these results, not from checking that a hook file exists.
+
+```
+  51/51 attacks stopped   11 blocked · 40 held for your OK
+  no false alarms on 35 everyday commands
+
+  Wipe your home dir or disk    ████████████████████ 11/11
+  Leak secrets off the machine  ████████████████████  6/6
+  Write keys into source        ████████████████████  9/9
+  …
+```
+
+It found 13 holes in our own 0.5.0 guard, including every way to send secrets off the machine. All of them are fixed and now tested in CI. `eos redteam --all` lists every case; `--card` makes the image.
 
 <details>
 <summary><b>Codex, Cursor, Gemini CLI, Copilot, Windsurf, OpenCode…</b></summary>
@@ -93,7 +113,7 @@ eos add owner/repo@skill --domain frontend   # adopt a community skill (recorded
 eos new-skill release-notes                  # your own skill → live next session as /eos:release-notes
 eos new-domain mobile -d "iOS/Android"       # a new area with its own playbook
 eos enable backend                           # turn on an area's on-demand pack
-eos score · eos receipts                     # grade the setup, see what the guards caught
+eos score · eos redteam · eos receipts       # grade the setup, attack the guards, see what they caught
 eos update · eos status · eos verify · eos validate · eos audit · eos doctor
 ```
 
@@ -103,7 +123,7 @@ Or just ask your agent: `/eos:add stripe webhooks`. It searches the open skills 
 
 | Hook | Does | Off switch |
 |---|---|---|
-| bash-guard | Blocks catastrophic commands; asks before risky ones; lets `rm -rf node_modules` through. Logs a redacted receipt. | `EOS_GUARD=off` or `{"guard":"off"}` |
+| bash-guard | Blocks catastrophic commands; asks before risky ones (force-push, `curl \| sh`, secrets sent off the machine, prod deploys); lets `rm -rf node_modules` through. Stops all 51 `eos redteam` attacks with no false alarms. Logs a redacted receipt. | `EOS_GUARD=off` or `{"guard":"off"}` |
 | secret-guard | Asks before real-looking keys / private keys / DB passwords go into source (`.env` allowed). Receipts record the key type and file name, never the key. | `{"secret_guard":"off"}` |
 | receipts | Local log at `~/.claude/eos-receipts.jsonl` that `eos receipts` reads. Never uploaded. | `EOS_RECEIPTS=off` |
 | session-brief | Stack detection, playbook routing, skill-pack and update notices | `EOS_UPDATE_CHECK=off` (updates only) |
@@ -119,6 +139,10 @@ Per-project switches go in `<project>/.claude/eos.json`.
 **Is it safe to pipe to bash?** Read it first: [`install.sh`](install.sh) (under 80 lines). It clones this repo to `~/engineering-os`, links one plugin, adds one import line to `~/.claude/CLAUDE.md`, and installs skills with the open `skills` CLI, which runs its own security scan. Community skills are also audited by `eos audit`.
 
 **Does `eos score` upload my config?** No. It reads files and prints a report; it makes no network calls. The card and badge contain only your grade and category percentages.
+
+**Does `eos redteam` run anything dangerous?** No. It builds fake tool calls and pipes them as JSON into your PreToolUse hooks, the same input Claude Code gives them, then reads each hook's verdict. The commands themselves are never run. It does run your hooks about 86 times each, so a hook that sends a notification on every call will send them. Fake keys are generated at runtime and never written to disk or receipts. Skip it inside the score with `eos score --no-redteam`.
+
+**Can a guard really stop a determined agent?** No. Pattern-based guards catch the mistakes agents actually make, not deliberate obfuscation (`base64 -d | sh`). They're a seatbelt; for untrusted work, use a sandbox or container too.
 
 **How do I uninstall?** `rm ~/.claude/skills/eos`, delete the import line from `~/.claude/CLAUDE.md`, and remove skills you don't want with `eos remove <skill>`.
 
@@ -141,7 +165,7 @@ site/                       install page (Vercel)
 
 ## Contributing
 
-Suggest a skill with an issue or PR to `registry/community.json` — include the source, install count and why it beats what's there. Run `eos validate` before opening a PR. See [CHANGELOG.md](CHANGELOG.md) for what's new.
+Suggest a skill, report a guard miss or false alarm, or improve a playbook: see [CONTRIBUTING.md](CONTRIBUTING.md). Security problems go through [private reporting](SECURITY.md), not issues. Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md). See [CHANGELOG.md](CHANGELOG.md) for what's new.
 
 If Engineering OS saves you a mistake, a ⭐ helps other people find it.
 

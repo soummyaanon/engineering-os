@@ -4,6 +4,24 @@ Ready-to-post copy. Attach `site/og.png` (or a 20–30s screen recording of the 
 
 Best order: X thread → Show HN the next weekday morning (US Eastern ~8–10am) → Reddit the same day → LinkedIn → Product Hunt once you have a few stars and replies to point to. Reply to every comment in the first two hours.
 
+## Lead with the redteam (0.6.0)
+
+A grade is something people check. An attack result is something they argue about and repost. Lead with the number and the honest admission.
+
+**X post (attach the 38/51 card from 0.5.0 next to the 51/51 card from 0.6.0):**
+I fired 51 attacks at my coding agent's guardrails: rm -rf ~ six ways, curl | sh, .env sent to a webhook, live Stripe keys written into source.
+
+My own guard, the one I ship, missed 13. Every secret-exfiltration attempt got through.
+
+Fixed now. Test yours. The calls are fake and nothing runs:
+`curl -fsSL engineering-os-hazel.vercel.app/score | python3 - redteam`
+
+**Show HN title:** Show HN: I fired 51 attacks at my coding agent's guardrails and my own guard missed 13
+
+**Show HN first paragraph:** `eos redteam` builds fake tool calls (51 attacks, 35 harmless look-alikes) and pipes them into whatever PreToolUse hooks and permission rules your Claude Code setup has, exactly as Claude Code would, then reports what got through and what nagged you for nothing. Nothing is executed, it works on anyone's guards, and it needs no install. Running it on my own project found that my bash guard matched `$HOME` against lowercased text (so `rm -rf $HOME` was never hard-blocked) and had no rule at all for `curl -d @.env`. The corpus is in one Python file; PRs with new attacks are the most useful thing you could send.
+
+**Before posting:** regenerate both cards (`eos redteam --card`, with the 0.5.0 guard and the current one) and check the numbers match the post.
+
 ## Lead with the score (0.5.0)
 
 The hook is no longer "162 skills". It's a grade people want to check and a receipt people want to post.

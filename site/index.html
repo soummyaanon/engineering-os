@@ -355,7 +355,7 @@
 
       <div class="status">
         <span class="live">ready</span>
-        <span class="opt">eos 0.5.0 · auto-update notices</span>
+        <span class="opt">eos 0.6.0 · auto-update notices</span>
         <span>10 playbooks</span>
         <span class="opt">162 skills</span>
         <span>4 guards</span>
@@ -379,6 +379,8 @@
 <span class="p">$</span> eos score --card     <span class="c"># shareable 1200×630 card</span>
 <span class="p">$</span> eos score --badge    <span class="c"># README badge with your grade</span>
 <span class="p">$</span> eos receipts         <span class="c"># what the guards stopped this week</span></pre>
+      <p class="lead" style="margin-top:22px">Then attack it. <code>redteam</code> fires 51 fake attacks at your guards (<code>rm -rf ~</code>, <code>curl | sh</code>, <code>.env</code> sent to a webhook, live keys in source) and 35 harmless look-alikes. Your hooks judge each one; nothing is executed.</p>
+      <div class="cmdline" style="margin-top:12px"><pre><span class="ps">$ </span>curl -fsSL engineering-os-hazel.vercel.app/score | python3 - redteam</pre><button class="copy" type="button" id="copy-redteam">Copy</button></div>
     </div>
   </section>
 
@@ -570,6 +572,7 @@
 
   setActive(active);
   wireCopy(document.getElementById("copy-score"), () => "curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 -");
+  wireCopy(document.getElementById("copy-redteam"), () => "curl -fsSL https://engineering-os-hazel.vercel.app/score | python3 - redteam");
 
   // ---------- terminal demo: one orchestrated sequence ----------
   const SCRIPT = [

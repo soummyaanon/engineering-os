@@ -44,5 +44,11 @@ jobs:
           printf '# rules\n@%s/CLAUDE.md\n' "$PWD" > $CLAUDE_CONFIG_DIR/CLAUDE.md
           python bin/eos_score.py --json --project /tmp | python -c 'import json,sys;d=json.load(sys.stdin);g={c["id"]:c["earned"] for c in d["checks"]};assert g["bash-guard"]==15 and g["secret-guard"]==10 and g["global-rules"]==8,g;print("ok: guarded setup ->",d["grade"],d["score"])'
           python bin/eos_score.py --badge | grep -q "img.shields.io/badge/agent%20setup"
+      - name: eos redteam - shipped guards stop every attack with no false alarms
+        run: |
+          export CLAUDE_CONFIG_DIR=$(mktemp -d)
+          python bin/eos_score.py redteam --json --project /tmp | python -c 'import json,sys;d=json.load(sys.stdin);assert d["stopped"]==0,d["stopped"];print("ok: no guards ->",d["stopped"],"/",d["attacks"])'
+          mkdir -p "$CLAUDE_CONFIG_DIR/skills" && ln -s "$PWD/plugins/eos" "$CLAUDE_CONFIG_DIR/skills/eos"
+          python bin/eos_score.py redteam --json --project /tmp | python -c 'import json,sys;d=json.load(sys.stdin);bad=[c["show"] for c in d["cases"] if (c["verdict"]!="pass")!=(c["kind"]=="attack")];assert not bad,bad;print("ok: eos guards ->",d["stopped"],"/",d["attacks"],"stopped,",d["false_alarms"],"false alarms")'
       - name: Every registry skill still exists upstream
         run: python bin/eos verify
