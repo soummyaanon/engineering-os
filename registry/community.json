@@ -147,8 +147,7 @@
       ],
       "optional": [
         "wshobson/agents@rag-implementation",
-        "langchain-ai/langchain-skills@langchain-rag",
-        "langchain-ai/langchain-skills@langgraph-fundamentals",
+        "langchain-ai/langchain-skills@langchain-build-agent",
         "elevenlabs/skills@text-to-speech"
       ],
       "plugins": [

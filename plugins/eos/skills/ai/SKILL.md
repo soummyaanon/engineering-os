@@ -15,7 +15,7 @@ LLM features fail differently from normal code: they work on the demo prompt and
 | Vercel AI SDK (streaming UI, tool calls, multi-provider) | `ai-sdk` |
 | Building an agent on the Claude Agent SDK | `agent-sdk-dev:new-sdk-app`, then verify with the `agent-sdk-verifier-*` agents |
 | Pydantic AI agents | `ai:building-pydantic-ai-agents` |
-| LangGraph agents | `langgraph-fundamentals` (optional: `eos enable ai`) |
+| LangChain, LangGraph or Deep Agents apps | `langchain-build-agent` (optional: `eos enable ai`) |
 | Building an MCP server | `mcp-builder` |
 | Prompt design and debugging | `prompt-engineering-patterns` |
 | What the agent sees: context, rules files, memory | `context-engineering` |
