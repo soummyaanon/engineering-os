@@ -9,7 +9,7 @@
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%2070%2B-dcdcdf?style=flat-square&labelColor=161618">
   <a href="https://github.com/soummyaanon/engineering-os/actions/workflows/verify.yml"><img alt="verify" src="https://img.shields.io/github/actions/workflow/status/soummyaanon/engineering-os/verify.yml?branch=main&style=flat-square&labelColor=161618&label=skills%20verified%20weekly"></a>
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-dcdcdf?style=flat-square&labelColor=161618"></a>
-  <a href="https://m8ven.ai/mcp/soummyaanon-engineering-os-16ytat?s=readme"><img alt="M8ven Score" src="https://m8ven.ai/badge/mcp/soummyaanon-engineering-os-16ytat?v=1197cfc2b59e5adcbb0cc1886d47cfb6"></a>
+  <a href="https://m8ven.ai/mcp/soummyaanon-engineering-os-16ytat?s=readme"><img alt="M8ven Score" src="https://m8ven.ai/badge/mcp/soummyaanon-engineering-os-16ytat"></a>
   <a href="https://m8ven.ai/mcp/soummyaanon/engineering-os?s=readme"><img alt="M8ven Score" src="https://m8ven.ai/badge/mcp/soummyaanon/engineering-os"></a>
   <a href="https://github.com/soummyaanon/engineering-os/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/soummyaanon/engineering-os?style=flat-square&labelColor=161618&color=e0a53b"></a>
 </p>
