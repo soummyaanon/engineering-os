@@ -5,11 +5,11 @@
 <p align="center">
   <a href="https://engineering-os-hazel.vercel.app"><img alt="Install page" src="https://img.shields.io/badge/install-one%20command-a88bfa?style=flat-square&labelColor=161618"></a>
   <img alt="Version" src="https://img.shields.io/github/package-json/v/soummyaanon/engineering-os?filename=plugins%2Feos%2F.claude-plugin%2Fplugin.json&style=flat-square&labelColor=161618&color=a88bfa&label=version">
-  <img alt="Skills" src="https://img.shields.io/badge/vetted%20skills-162-5bb974?style=flat-square&labelColor=161618">
+  <img alt="Skills" src="https://img.shields.io/badge/vetted%20skills-161-5bb974?style=flat-square&labelColor=161618">
   <img alt="Agents" src="https://img.shields.io/badge/agents-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%2070%2B-dcdcdf?style=flat-square&labelColor=161618">
   <a href="https://github.com/soummyaanon/engineering-os/actions/workflows/verify.yml"><img alt="verify" src="https://img.shields.io/github/actions/workflow/status/soummyaanon/engineering-os/verify.yml?branch=main&style=flat-square&labelColor=161618&label=skills%20verified%20weekly"></a>
   <a href="LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-dcdcdf?style=flat-square&labelColor=161618"></a>
-  <a href="https://m8ven.ai/mcp/soummyaanon-engineering-os-16ytat?s=readme"><img alt="M8ven Score" src="https://m8ven.ai/badge/mcp/soummyaanon-engineering-os-16ytat?v=1197cfc2b59e5adcbb0cc1886d47cfb6"></a>
+  <a href="https://m8ven.ai/mcp/soummyaanon-engineering-os-16ytat?s=readme"><img alt="M8ven Score" src="https://m8ven.ai/badge/mcp/soummyaanon-engineering-os-16ytat"></a>
   <a href="https://m8ven.ai/mcp/soummyaanon/engineering-os?s=readme"><img alt="M8ven Score" src="https://m8ven.ai/badge/mcp/soummyaanon/engineering-os"></a>
   <a href="https://github.com/soummyaanon/engineering-os/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/soummyaanon/engineering-os?style=flat-square&labelColor=161618&color=e0a53b"></a>
 </p>
@@ -104,7 +104,7 @@ Or paste [this prompt](https://engineering-os-hazel.vercel.app/prompt) into any 
 
 **Reverse engineering & research** — protocol reverse engineering, competitor profiling, customer research.
 
-**On demand** (`eos enable <area>`) — **mobile**: Expo, React Native · **deploy**: Cloudflare Workers, Firebase Hosting, Netlify, Railway, Terraform, AWS serverless/containers/IAM/Amplify, Azure diagnostics/AKS/App Service, Vercel optimize · **backend**: Convex, MongoDB, Redis, Hono, Clerk, Sentry, NestJS, Firebase, microservices, API security testing · **frontend**: three.js, GSAP performance, Emil Kowalski's animation review/improve/prototype · **ai**: LangGraph, ElevenLabs · **gtm**: Remotion captions and SaaS, HeyGen HyperFrames video, ads, A/B testing, programmatic SEO, and more.
+**On demand** (`eos enable <area>`) — **mobile**: Expo, React Native · **deploy**: Cloudflare Workers, Firebase Hosting, Netlify, Railway, Terraform, AWS serverless/containers/IAM/Amplify, Azure diagnostics/AKS/App Service, Vercel optimize · **backend**: Convex, MongoDB, Redis, Hono, Clerk, Sentry, NestJS, Firebase, microservices, API security testing · **frontend**: three.js, GSAP performance, Emil Kowalski's animation review/improve/prototype · **ai**: LangChain/LangGraph, ElevenLabs · **gtm**: Remotion captions and SaaS, HeyGen HyperFrames video, ads, A/B testing, programmatic SEO, and more.
 
 Full list with sources: [`registry/community.json`](registry/community.json).
 
