@@ -13,6 +13,14 @@
     {
       "source": "/prompt",
       "destination": "/prompt.txt"
+    },
+    {
+      "source": "/s/:code",
+      "destination": "/api/s?s=:code"
+    },
+    {
+      "source": "/r/:code",
+      "destination": "/api/s?r=:code"
     }
   ],
   "headers": [
