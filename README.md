@@ -171,4 +171,4 @@ Suggest a skill, report a guard miss or false alarm, or improve a playbook: see 
 
 If Engineering OS saves you a mistake, a ⭐ helps other people find it.
 
-MIT © Soumyaranjan Panda
+MIT © [Soumyaranjan Panda](https://soumyapanda.dev)
