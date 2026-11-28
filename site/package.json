@@ -4,6 +4,6 @@
   "type": "module",
   "description": "Static landing page plus two edge functions: share pages (/s, /r) and their preview images (/api/og).",
   "dependencies": {
-    "@vercel/og": "1.0.3"
+    "@vercel/og": "0.8.6"
   }
 }
