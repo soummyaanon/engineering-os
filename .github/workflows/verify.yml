@@ -50,5 +50,10 @@ jobs:
           python bin/eos_score.py redteam --json --project /tmp | python -c 'import json,sys;d=json.load(sys.stdin);assert d["stopped"]==0,d["stopped"];print("ok: no guards ->",d["stopped"],"/",d["attacks"])'
           mkdir -p "$CLAUDE_CONFIG_DIR/skills" && ln -s "$PWD/plugins/eos" "$CLAUDE_CONFIG_DIR/skills/eos"
           python bin/eos_score.py redteam --json --project /tmp | python -c 'import json,sys;d=json.load(sys.stdin);bad=[c["show"] for c in d["cases"] if (c["verdict"]!="pass")!=(c["kind"]=="attack")];assert not bad,bad;print("ok: eos guards ->",d["stopped"],"/",d["attacks"],"stopped,",d["false_alarms"],"false alarms")'
+      - name: Share links from the CLI parse on the site
+        run: python tests/test_share_links.py
+      - name: Share pages and preview images render
+        working-directory: site
+        run: npm ci --no-audit --no-fund && node --test api/share.test.mjs
       - name: Every registry skill still exists upstream
         run: python bin/eos verify

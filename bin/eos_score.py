@@ -389,14 +389,24 @@ def badge_url(summary):
     label = urllib.parse.quote(f"{g} · {summary['score']}")
     return f"https://img.shields.io/badge/agent%20setup-{label}-{COLORS[g[0]].lstrip('#')}?style=flat-square&labelColor=161618"
 
-def badge_md(summary):
-    return f"[![agent setup: {summary['grade']}]({badge_url(summary)})]({SITE}/#score)"
+def badge_md(summary, url):
+    return f"[![agent setup: {summary['grade']}]({badge_url(summary)})]({url})"
 
-def share_text(summary):
+# Share links carry only the numbers; the site rebuilds the page and preview image from them (site/api/_share.js).
+# Printing one sends nothing: the user decides whether to post it.
+SCORE_CATS = (G_, "Working rules", "Skills", "Feedback loops")
+
+def score_url(summary, rt=None):
+    code = f"{summary['score']}-" + ".".join(str(summary["categories"].get(cat, 0)) for cat in SCORE_CATS)
+    if rt:
+        code += f"-{rt['stopped']}.{rt['attacks']}.{rt['false_alarms']}"
+    return f"{SITE}/s/{code}"
+
+def share_text(summary, url):
     return (f"My coding agent setup scored {summary['grade']} ({summary['score']}/100) on eos score.\n\n"
-            f"Score yours in 5 seconds, nothing leaves your machine:\n{SCORE_CMD}")
+            f"Score yours in 5 seconds, nothing leaves your machine:\n{SCORE_CMD}\n\n{url}")
 
-def print_report(checks, summary):
+def print_report(checks, summary, url):
     g = summary["grade"]
     col = TERM[g[0]]
     print()
@@ -425,7 +435,8 @@ def print_report(checks, summary):
     if n:
         print("\n  " + c("1", f"Guards stopped {n} risky action{'s' * (n != 1)} in the last 30 days") + c("2", "  →  eos receipts"))
     print("\n  " + c("2", "What gets through your guards:") + "  eos redteam")
-    print("  " + c("2", "Share it:") + "  eos score --card   " + c("2", "README badge:") + "  eos score --badge")
+    print("  " + c("2", "Share it:") + f"  {url}")
+    print("  " + c("2", "Image card:") + "  eos score --card   " + c("2", "README badge:") + "  eos score --badge")
     print("  " + c("2", "Read-only and local. Nothing was sent anywhere."))
     print()
 
@@ -749,15 +760,21 @@ def print_redteam(rt, show_all=False):
     print("  " + c("2", "Default mode asks before every command; guards are what still holds when you approve fast or auto-approve."))
     if (misses or alarms) and not eos_installed():
         print("\n  " + c("1", "Stop every one, no false alarms:") + f"  {INSTALL}")
-    print("\n  " + c("2", "Share it:") + "  eos redteam --card   " + c("2", "Every case:") + "  eos redteam --all")
+    print("\n  " + c("2", "Share it:") + f"  {redteam_url(rt)}")
+    print("  " + c("2", "Image card:") + "  eos redteam --card   " + c("2", "Every case:") + "  eos redteam --all")
     print()
+
+
+def redteam_url(rt):
+    cats = ".".join(f"{v['stopped']}.{v['total']}" for v in rt["by_category"].values())  # CATS order, as the site expects
+    return f"{SITE}/r/{rt['stopped']}-{rt['attacks']}-{rt['false_alarms']}-{rt['everyday']}-{cats}"
 
 
 def redteam_share(rt):
     n, k, fa = rt["attacks"], rt["stopped"], rt["false_alarms"]
     tail = " Zero false alarms." if k and not fa else ""
     return (f"I fired {n} attacks at my coding agent's guardrails: rm -rf ~, curl | sh, leaking .env, API keys in code…\n"
-            f"They stopped {k}/{n}.{tail}\n\nTest yours (fake tool calls, nothing runs):\n{REDTEAM_CMD}")
+            f"They stopped {k}/{n}.{tail}\n\nTest yours (fake tool calls, nothing runs):\n{REDTEAM_CMD}\n\n{redteam_url(rt)}")
 
 
 def redteam_svg(rt):
@@ -790,7 +807,7 @@ def redteam_main(argv=None):
     a = ap.parse_args(argv)
     rt = run_redteam(Setup(os.path.abspath(a.project)))
     if a.json:
-        print(json.dumps(rt, indent=2))
+        print(json.dumps({**rt, "share_url": redteam_url(rt)}, indent=2))
         return rt
     print_redteam(rt, a.all)
     if a.card:
@@ -921,18 +938,20 @@ def main(argv=None):
     rt = None if a.no_redteam or os.environ.get("EOS_REDTEAM") == "off" else run_redteam(setup)
     checks = run_checks(setup, rt)
     summary = summarize(checks)
+    url = score_url(summary, rt)
     if a.json:
         red = {k: v for k, v in rt.items() if k != "cases"} if rt else None
-        print(json.dumps({**summary, "checks": checks, "redteam": red, "receipts_30d": receipts_count()}, indent=2))
+        print(json.dumps({**summary, "share_url": url, "checks": checks, "redteam": red,
+                          "receipts_30d": receipts_count()}, indent=2))
         return summary
     if a.badge:
-        print(badge_md(summary))
+        print(badge_md(summary, url))
         return summary
-    print_report(checks, summary)
+    print_report(checks, summary, url)
     if a.card:
         svg, png = write_card(score_svg(summary), a.card)
         print(f"  card: {png or svg}")
-        print("  post: https://x.com/intent/post?text=" + urllib.parse.quote(share_text(summary)))
+        print("  post: https://x.com/intent/post?text=" + urllib.parse.quote(share_text(summary, url)))
         print()
     return summary
 
