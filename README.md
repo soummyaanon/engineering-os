@@ -82,7 +82,7 @@ Or paste [this prompt](https://engineering-os-hazel.vercel.app/prompt) into any 
 | | |
 |---|---|
 | 🧭 **10 playbooks** | `/eos:frontend` `/eos:backend` `/eos:ai` `/eos:evals` `/eos:deploy` `/eos:reverse` `/eos:research` `/eos:gtm`, plus `/eos:map` (which skill for this task?) and `/eos:add` (grow the harness). Each one knows the best specialist skills and the bar for "done". |
-| 📦 **162 vetted skills** | 84 installed by default, 78 more on demand with `eos enable <area>`. Official vendor or top author, ≥1K installs, not redundant. |
+| 📦 **161 vetted skills** | 84 installed by default, 77 more on demand with `eos enable <area>`. Official vendor or top author, ≥1K installs, not redundant. |
 | 📊 **`eos score`** | Grades any Claude Code setup (A+ to F) with the fixes that matter most. Shareable card and README badge. |
 | 🧾 **`eos receipts`** | Every risky action the guards caught, with secrets redacted: *"This week my agent tried 4 risky things, all caught before they ran."* `--card` / `--share` to post it. |
 | 🛡️ **Guards that run on every command** | Blocks `rm -rf ~`-class disasters. Asks before force-push, pushing to main, `reset --hard`, `DROP TABLE`, `curl \| sh`, publish and prod deploys. Stops real API keys landing in source. Works in auto mode. |
@@ -136,7 +136,7 @@ Per-project switches go in `<project>/.claude/eos.json`.
 
 ## FAQ
 
-**Will 162 skills make my agent worse at picking?** That's why only 84 install by default, and why playbooks exist: Claude loads one playbook, which names the one or two specialists that fit. Area packs stay off until your stack needs them.
+**Will 161 skills make my agent worse at picking?** That's why only 84 install by default, and why playbooks exist: Claude loads one playbook, which names the one or two specialists that fit. Area packs stay off until your stack needs them.
 
 **Is it safe to pipe to bash?** Read it first: [`install.sh`](install.sh) (under 80 lines). It clones this repo to `~/engineering-os`, links one plugin, adds one import line to `~/.claude/CLAUDE.md`, and installs skills with the open `skills` CLI, which runs its own security scan. Community skills are also audited by `eos audit`.
 
