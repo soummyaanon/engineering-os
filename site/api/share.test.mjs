@@ -1,9 +1,18 @@
 // node site/api/share.test.mjs  — parser bounds, page escaping, and PNG rendering (writes cards to $OUT if set).
 import assert from "node:assert/strict";
 import { writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
+import { dirname } from "node:path";
 import { parseRedteam, parseScore } from "./_share.js";
-import og from "./og.js";
 import page from "./s.js";
+
+// @vercel/og 1.0.3's Node build is ESM but bundles harfbuzzjs (Emscripten), which calls require("fs") and reads
+// hb.wasm from __dirname at import time; neither exists in ESM, so a plain-Node import crashes. Production runs the
+// edge build and is unaffected. Give the bundle those two CommonJS globals, scoped to harfbuzzjs, before loading og.js.
+const ogRequire = createRequire(import.meta.resolve("@vercel/og"));
+globalThis.require ??= ogRequire;
+globalThis.__dirname ??= dirname(ogRequire.resolve("harfbuzzjs/package.json"));
+const { default: og } = await import("./og.js");
 
 const RT = "51-51-0-35-11.11.9.9.5.5.5.5.6.6.6.6.9.9";
 
